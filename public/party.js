@@ -4,7 +4,7 @@ PARTY.run(function(sc) {
   console.log('party time')
 })
 
-PARTY.factory('sc', function($rootScope) {
+PARTY.factory('sc', function($rootScope, $q) {
   var sc = {}
 
   sc.login = function() {
@@ -18,6 +18,18 @@ PARTY.factory('sc', function($rootScope) {
     SC.accessToken(null)
     localStorage.removeItem('scToken')
     $rootScope.scUser = null
+  }
+
+  sc.get = function(path, params) {
+    var deferred = $q.defer()
+    SC.get(path, params, function(data, error) {
+      if (error)
+        deferred.reject(error)
+      else
+        deferred.resolve(data)
+      $rootScope.$apply()
+    })
+    return deferred.promise
   }
 
   function resumeSession() {
@@ -47,6 +59,15 @@ PARTY.controller('root', function($scope, sc) {
   $scope.logout = function() {
     sc.logout()
   }
+  $scope.playTrack = function(track) {
+    console.log('plackTrack', track)
+    SC.stream(track.stream_url, {
+      autoPlay: true,
+      ontimedcomments: function(comments){
+        console.log(comments[0].body);
+      }
+    });
+  }
 })
 
 PARTY.filter('debug', function() {
@@ -65,29 +86,35 @@ PARTY.config(function($routeProvider, $locationProvider) {
   })
   .when('/tracks', {
     templateUrl: '/html/tracks.html',
-    controller: function($scope) {
-      SC.get('/me/tracks', function(data) {
-        $scope.tracks = data
-        $scope.$apply()
-      })
+    resolve: {
+      tracks: function(sc) {
+        return sc.get('/me/tracks')
+      }
+    },
+    controller: function($scope, tracks) {
+      $scope.tracks = tracks
     }
   })
   .when('/followers', {
     templateUrl: '/html/followers.html',
-    controller: function($scope) {
-      SC.get('/me/followers', function(data) {
-        $scope.followers = data
-        $scope.$apply()
-      })
+    resolve: {
+      followers: function(sc) {
+        return sc.get('/me/followers')
+      }
+    },
+    controller: function($scope, followers) {
+      $scope.followers = followers
     }
   })
   .when('/followings', {
     templateUrl: '/html/followings.html',
-    controller: function($scope) {
-      SC.get('/me/followings', function(data) {
-        $scope.followings = data
-        $scope.$apply()
-      })
+    resolve: {
+      followings: function(sc) {
+        return sc.get('/me/followings')
+      }
+    },
+    controller: function($scope, followings) {
+      $scope.followings = followings
     }
   })
 
