@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>party</title>
+    <link rel='stylesheet' href='/style.css' />
+  </head>
+  <body>
+    <h1>party</h1>
+    <button onclick="scConnect()">connect</button>
+
+    <script src="//connect.soundcloud.com/sdk.js"></script>
+    <script>
+
+      SC.initialize({
+        client_id: 'a363a0f2b20a24d72e93f9d02b703830',
+        redirect_uri: 'http://localhost:9000/'
+      });
+
+      function scConnect() {
+        if (resumeSession()) return
+        SC.connect(function() {
+          onLogin()
+        });
+      }
+      function resumeSession() {
+        var token = localStorage.getItem('scToken')
+        if (!token) return
+        SC.accessToken(token)
+        onLogin()
+        return true
+      }
+      function onLogin() {
+        localStorage.setItem('scToken', SC.accessToken())
+        SC.get('/me', function(me) {
+          console.log('Howdy', me);
+        });
+      }
+
+      resumeSession()
+
+    </script>
+    <script src="hello.js"></script>
+  </body>
+</html>
