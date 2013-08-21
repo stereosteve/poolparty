@@ -11,37 +11,12 @@
       <button ng-click="logout()">logout</button>
     </div>
 
-    <a href="#/me">me</a>
-    <a href="#/tracks">tracks</a>
-    <a href="#/followers">followers</a>
-    <a href="#/followings">followings</a>
+    <a ng-href="#/users/{{scUser.id}}">me</a>
 
     <div ng-view></div>
 
 
-<script type="text/ng-template" id="/html/me.html">
-  <h2>me</h2>
-  <pre>{{scUser | debug}}</pre>
-</script>
-
-<script type="text/ng-template" id="/html/tracks.html">
-  <h2>Tracks</h2>
-  <div ng-repeat="track in tracks" ng-click="playTrack(track)">
-    <pre>{{track | debug}}</pre>
-  </div>
-</script>
-
-<script type="text/ng-template" id="/html/followers.html">
-  <h2>Followers</h2>
-  <pre>{{followers | debug}}</pre>
-</script>
-
-<script type="text/ng-template" id="/html/followings.html">
-  <h2>Followings</h2>
-  <pre>{{followings | debug}}</pre>
-</script>
-
-
+    <!-- libs -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.js"></script>

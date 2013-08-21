@@ -1,0 +1,23 @@
+<h2>{{user.full_name}}</h2>
+<img ng-src="{{user.avatar_url}}">
+
+<h3>Tracks</h3>
+<div ng-repeat="track in tracks" ng-click="playTrack(track)">
+  <h5>{{track.title}}</h5>
+  <p>{{track.description}}</p>
+</div>
+
+<h3>Followers</h3>
+<div ng-repeat="user in followers" ng-click="showUser(user)" class="userTile">
+  <img ng-src="{{user.avatar_url}}">
+  <div class="info">{{user.username}}</div>
+</div>
+
+<h3>Followings</h3>
+<div ng-repeat="user in followings" ng-click="showUser(user)" class="userTile">
+  <img ng-src="{{user.avatar_url}}">
+  <div class="info">{{user.username}}</div>
+</div>
+
+
+<!-- <pre>{{user | debug}}</pre> -->

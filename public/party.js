@@ -52,7 +52,7 @@ PARTY.factory('sc', function($rootScope, $q) {
   return sc;
 })
 
-PARTY.controller('root', function($scope, sc) {
+PARTY.controller('root', function($scope, sc, $location) {
   $scope.login = function() {
     sc.login()
   }
@@ -62,11 +62,16 @@ PARTY.controller('root', function($scope, sc) {
   $scope.playTrack = function(track) {
     console.log('plackTrack', track)
     SC.stream(track.stream_url, {
-      autoPlay: true,
       ontimedcomments: function(comments){
         console.log(comments[0].body);
       }
+    }, function(sound) {
+      soundManager.stopAll()
+      sound.play()
     });
+  }
+  $scope.showUser = function(user) {
+    $location.path('/users/' + user.id)
   }
 })
 
@@ -76,6 +81,19 @@ PARTY.filter('debug', function() {
   }
 })
 
+PARTY.controller('userCtrl', function($scope, user, sc) {
+  $scope.user = user
+  sc.get('/users/' + user.id + '/followers').then(function(data) {
+    $scope.followers = data
+  })
+  sc.get('/users/' + user.id + '/followings').then(function(data) {
+    $scope.followings = data
+  })
+  sc.get('/users/' + user.id + '/tracks').then(function(data) {
+    $scope.tracks = data
+  })
+})
+
 
 PARTY.config(function($routeProvider, $locationProvider) {
   // $locationProvider.html5Mode(true)
@@ -83,6 +101,15 @@ PARTY.config(function($routeProvider, $locationProvider) {
   $routeProvider
   .when('/me', {
     templateUrl: '/html/me.html',
+  })
+  .when('/users/:user_id', {
+    templateUrl: '/html/user.html',
+    resolve: {
+      user: function(sc, $route) {
+        return sc.get('/users/' + $route.current.params.user_id)
+      }
+    },
+    controller: 'userCtrl'
   })
   .when('/tracks', {
     templateUrl: '/html/tracks.html',
