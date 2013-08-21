@@ -1,10 +1,23 @@
-var PARTY = angular.module('party', ['ngRoute'])
+var PP = angular.module('party', ['ngRoute'])
 
-PARTY.run(function(sc) {
-  console.log('party time')
+
+PP.factory('eventSource', function($rootScope) {
+  var source = new EventSource('/events');
+  source.addEventListener('message', function(e) {
+    try {
+      var data = JSON.parse(e.data)
+    } catch(err) {
+      console.error("invalid event json", e.data, err)
+    }
+    console.log(data);
+    if (data.serverDate) {
+      $rootScope.serverDate = data.serverDate
+      $rootScope.$apply()
+    }
+  }, false);
 })
 
-PARTY.factory('sc', function($rootScope, $q) {
+PP.factory('sc', function($rootScope, $q) {
   var sc = {}
 
   sc.login = function() {
@@ -52,7 +65,7 @@ PARTY.factory('sc', function($rootScope, $q) {
   return sc;
 })
 
-PARTY.controller('root', function($scope, sc, $location) {
+PP.controller('root', function($scope, sc, $location) {
   $scope.login = function() {
     sc.login()
   }
@@ -75,13 +88,13 @@ PARTY.controller('root', function($scope, sc, $location) {
   }
 })
 
-PARTY.filter('debug', function() {
+PP.filter('debug', function() {
   return function(obj) {
     return JSON.stringify(obj, undefined, 2)
   }
 })
 
-PARTY.controller('userCtrl', function($scope, user, sc) {
+PP.controller('userCtrl', function($scope, user, sc) {
   $scope.user = user
   sc.get('/users/' + user.id + '/followers').then(function(data) {
     $scope.followers = data
@@ -95,13 +108,10 @@ PARTY.controller('userCtrl', function($scope, user, sc) {
 })
 
 
-PARTY.config(function($routeProvider, $locationProvider) {
+PP.config(function($routeProvider, $locationProvider) {
   // $locationProvider.html5Mode(true)
 
   $routeProvider
-  .when('/me', {
-    templateUrl: '/html/me.html',
-  })
   .when('/users/:user_id', {
     templateUrl: '/html/user.html',
     resolve: {
@@ -111,38 +121,12 @@ PARTY.config(function($routeProvider, $locationProvider) {
     },
     controller: 'userCtrl'
   })
-  .when('/tracks', {
-    templateUrl: '/html/tracks.html',
-    resolve: {
-      tracks: function(sc) {
-        return sc.get('/me/tracks')
-      }
-    },
-    controller: function($scope, tracks) {
-      $scope.tracks = tracks
-    }
-  })
-  .when('/followers', {
-    templateUrl: '/html/followers.html',
-    resolve: {
-      followers: function(sc) {
-        return sc.get('/me/followers')
-      }
-    },
-    controller: function($scope, followers) {
-      $scope.followers = followers
-    }
-  })
-  .when('/followings', {
-    templateUrl: '/html/followings.html',
-    resolve: {
-      followings: function(sc) {
-        return sc.get('/me/followings')
-      }
-    },
-    controller: function($scope, followings) {
-      $scope.followings = followings
-    }
+  .when('/tick', {
+    template: 'tick tock',
   })
 
+})
+
+PP.run(function(sc, eventSource) {
+  console.log('party time')
 })
