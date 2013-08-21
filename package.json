@@ -8,6 +8,8 @@
   "dependencies": {
     "express": "3.3.5",
     "ejs": "*",
-    "connect-sse": "~1.0.5"
+    "connect-sse": "~1.0.5",
+    "authom": "~0.4.17",
+    "connect-redis": "~1.4.5"
   }
 }
