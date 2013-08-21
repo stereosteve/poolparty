@@ -6,13 +6,38 @@
   </head>
   <body ng-app="party" ng-controller="root">
 
-    <h1>party</h1>
-    <button ng-click="login()">login</button>
-    <button ng-click="logout()">logout</button>
+    <div style="float: right">
+      <button ng-click="login()">login</button>
+      <button ng-click="logout()">logout</button>
+    </div>
 
-    <pre>{{scUser}}</pre>
+    <a href="#/me">me</a>
+    <a href="#/tracks">tracks</a>
+    <a href="#/followers">followers</a>
+    <a href="#/followings">followings</a>
+
+    <div ng-view></div>
 
 
+<script type="text/ng-template" id="/html/me.html">
+  <h2>me</h2>
+  <pre>{{scUser | debug}}</pre>
+</script>
+
+<script type="text/ng-template" id="/html/tracks.html">
+  <h2>Tracks</h2>
+  <pre>{{Tracks | debug}}</pre>
+</script>
+
+<script type="text/ng-template" id="/html/followers.html">
+  <h2>Followers</h2>
+  <pre>{{followers | debug}}</pre>
+</script>
+
+<script type="text/ng-template" id="/html/followings.html">
+  <h2>Followings</h2>
+  <pre>{{followings | debug}}</pre>
+</script>
 
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>

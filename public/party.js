@@ -48,3 +48,47 @@ PARTY.controller('root', function($scope, sc) {
     sc.logout()
   }
 })
+
+PARTY.filter('debug', function() {
+  return function(obj) {
+    return JSON.stringify(obj, undefined, 2)
+  }
+})
+
+
+PARTY.config(function($routeProvider, $locationProvider) {
+  // $locationProvider.html5Mode(true)
+
+  $routeProvider
+  .when('/me', {
+    templateUrl: '/html/me.html',
+  })
+  .when('/tracks', {
+    templateUrl: '/html/tracks.html',
+    controller: function($scope) {
+      SC.get('/me/tracks', function(data) {
+        $scope.tracks = data
+        $scope.$apply()
+      })
+    }
+  })
+  .when('/followers', {
+    templateUrl: '/html/followers.html',
+    controller: function($scope) {
+      SC.get('/me/followers', function(data) {
+        $scope.followers = data
+        $scope.$apply()
+      })
+    }
+  })
+  .when('/followings', {
+    templateUrl: '/html/followings.html',
+    controller: function($scope) {
+      SC.get('/me/followings', function(data) {
+        $scope.followings = data
+        $scope.$apply()
+      })
+    }
+  })
+
+})
