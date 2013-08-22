@@ -32,19 +32,6 @@ PP.factory('eventSource', function($rootScope) {
 PP.factory('sc', function($rootScope, $q) {
   var sc = {}
 
-  sc.login = function() {
-    if (resumeSession()) return
-    SC.connect(function() {
-      onLogin()
-    });
-  }
-
-  sc.logout = function() {
-    SC.accessToken(null)
-    localStorage.removeItem('scToken')
-    $rootScope.scUser = null
-  }
-
   sc.get = function(path, params) {
     var deferred = $q.defer()
     SC.get(path, params, function(data, error) {
@@ -57,32 +44,10 @@ PP.factory('sc', function($rootScope, $q) {
     return deferred.promise
   }
 
-  function resumeSession() {
-    var token = localStorage.getItem('scToken')
-    if (!token) return
-    SC.accessToken(token)
-    onLogin()
-    return true
-  }
-  function onLogin() {
-    localStorage.setItem('scToken', SC.accessToken())
-    SC.get('/me', function(me) {
-      $rootScope.scUser = me
-      $rootScope.$apply()
-    });
-  }
-
-  resumeSession()
   return sc;
 })
 
 PP.controller('root', function($scope, sc, $location, $http) {
-  $scope.login = function() {
-    sc.login()
-  }
-  $scope.logout = function() {
-    sc.logout()
-  }
   $scope.playTrack = function(track) {
     $http.post('/play', {track: track})
   }
@@ -137,6 +102,7 @@ PP.config(function($routeProvider, $locationProvider) {
 
 })
 
-PP.run(function(sc, eventSource) {
+PP.run(function(eventSource, $rootScope) {
+  $rootScope.currentUser = USER
   console.log('party time')
 })

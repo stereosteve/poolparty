@@ -26,17 +26,14 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
 app.use(express.logger('dev'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser(process.env.COOKIE_SECRET));
 app.use(express.session({store: sessionStore}));
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.errorHandler());
 
-// development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
-}
 
 // authom
 
@@ -83,14 +80,17 @@ var loginRequired = function(req, res, next) {
 
 
 app.get('/', function(req, res) {
-  res.render('index')
+  res.render('home')
 });
 
 app.get("/auth/:service", authom.app)
 
 app.get('/channel/:channelName', loginRequired, function(req, res) {
   req.session.channelName = req.params.channelName
-  res.render('index')
+  res.render('layout', {
+    token: req.session.token,
+    user: req.session.user,
+  })
 });
 
 app.get('/me', loginRequired, function(req, res) {
@@ -100,7 +100,7 @@ app.get('/me', loginRequired, function(req, res) {
 app.get('/logout', function(req, res) {
   req.session.destroy(function(err) {
     if (err) return next(err);
-    res.send('you are logged out');
+    res.redirect('/');
   });
 })
 

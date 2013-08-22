@@ -7,12 +7,9 @@
   <body ng-app="party" ng-controller="root">
 
     <div style="float: right">
-      <small>{{serverDate}}</small>
-      <button ng-click="login()">login</button>
-      <button ng-click="logout()">logout</button>
+      <a ng-href="#/users/{{currentUser.id}}">me</a>
+      <a href="/logout">logout</a>
     </div>
-
-    <a ng-href="#/users/{{scUser.id}}">me</a>
 
     <div style="background: #f0f0f0; padding: 20px">
       <form ng-submit="say()">
@@ -34,6 +31,8 @@
         client_id: 'a363a0f2b20a24d72e93f9d02b703830',
         redirect_uri: 'http://localhost:9000/'
       });
+      SC.accessToken('<%- token %>');
+      window.USER = <%- JSON.stringify(user) %>;
     </script>
 
     <script src="/party.js"></script>
