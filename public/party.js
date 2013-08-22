@@ -10,10 +10,22 @@ PP.factory('eventSource', function($rootScope) {
       console.error("invalid event json", e.data, err)
     }
     console.log(data);
-    if (data.serverDate) {
-      $rootScope.serverDate = data.serverDate
-      $rootScope.$apply()
+
+    if (data._event === 'chat') {
+      console.log('got de chat', data)
     }
+    else if (data._event === 'play') {
+      var track = data.body.track
+      SC.stream(track.stream_url, {
+        ontimedcomments: function(comments){
+          console.log(comments);
+        }
+      }, function(sound) {
+        soundManager.stopAll()
+        sound.play()
+      });
+    }
+
   }, false);
 })
 
@@ -72,21 +84,12 @@ PP.controller('root', function($scope, sc, $location, $http) {
     sc.logout()
   }
   $scope.playTrack = function(track) {
-    console.log('plackTrack', track)
-    SC.stream(track.stream_url, {
-      ontimedcomments: function(comments){
-        console.log(comments[0].body);
-      }
-    }, function(sound) {
-      soundManager.stopAll()
-      sound.play()
-    });
+    $http.post('/play', {track: track})
   }
   $scope.showUser = function(user) {
     $location.path('/users/' + user.id)
   }
   $scope.say = function() {
-    console.log('say', $scope.chat)
     $http.post('/chat', {message: $scope.chat})
     $scope.chat = undefined
   }
@@ -108,6 +111,9 @@ PP.controller('userCtrl', function($scope, user, sc) {
   })
   sc.get('/users/' + user.id + '/tracks').then(function(data) {
     $scope.tracks = data
+  })
+  sc.get('/users/' + user.id + '/favorites').then(function(data) {
+    $scope.favorites = data
   })
 })
 

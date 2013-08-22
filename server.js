@@ -88,7 +88,7 @@ app.get('/', function(req, res) {
 
 app.get("/auth/:service", authom.app)
 
-app.get('/channel/:channelName', function(req, res) {
+app.get('/channel/:channelName', loginRequired, function(req, res) {
   req.session.channelName = req.params.channelName
   res.render('index')
 });
@@ -104,12 +104,25 @@ app.get('/logout', function(req, res) {
   });
 })
 
-app.post('/chat', function(req, res) {
+app.post('/chat', loginRequired, function(req, res) {
   var chan = getChannel(req.session.channelName)
   var ev = {
     _event: 'chat',
     message: req.body.message,
     user: req.session.user,
+    time: new Date(),
+  }
+  chan.emit('ev', ev)
+  res.send('ok')
+})
+
+app.post('/play', loginRequired, function(req, res) {
+  var chan = getChannel(req.session.channelName)
+  var ev = {
+    _event: 'play',
+    body: req.body,
+    user: req.session.user,
+    time: new Date(),
   }
   chan.emit('ev', ev)
   res.send('ok')

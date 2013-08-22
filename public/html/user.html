@@ -7,6 +7,13 @@
   <p>{{track.description}}</p>
 </div>
 
+<h3>Favorites</h3>
+<div ng-repeat="track in favorites" ng-click="playTrack(track)">
+  <h5>{{track.title}}</h5>
+  <p>{{track.description}}</p>
+  <pre>{{track | debug}}</pre>
+</div>
+
 <h3>Followers</h3>
 <div ng-repeat="user in followers" ng-click="showUser(user)" class="userTile">
   <img ng-src="{{user.avatar_url}}">
