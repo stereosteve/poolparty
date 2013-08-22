@@ -9,11 +9,19 @@ process.env.COOKIE_SECRET = 'yoe8iqysbijf85x'
 var express = require('express')
   , http = require('http')
   , path = require('path')
-  , sse = require('connect-sse')
+  , sse = require('connect-sse')()
   , EventEmitter = require('events').EventEmitter
   , authom = require('authom')
+  , Redis = require('redis')
+  , superagent = require('superagent')
 
 var app = express();
+var redis = Redis.createClient();
+
+redis.select(9)
+redis.on("error", function (err) {
+    console.error("redis error", err);
+});
 
 var RedisStore = require('connect-redis')(express);
 var sessionStore = new RedisStore({
@@ -75,8 +83,7 @@ var loginRequired = function(req, res, next) {
   res.redirect('/auth/soundcloud')
 }
 
-// endpoints
-
+// no auth
 
 
 app.get('/', function(req, res) {
@@ -85,18 +92,6 @@ app.get('/', function(req, res) {
 
 app.get("/auth/:service", authom.app)
 
-app.get('/channel/:channelName', loginRequired, function(req, res) {
-  req.session.channelName = req.params.channelName
-  res.render('layout', {
-    token: req.session.token,
-    user: req.session.user,
-  })
-});
-
-app.get('/me', loginRequired, function(req, res) {
-  res.json(req.session.user)
-})
-
 app.get('/logout', function(req, res) {
   req.session.destroy(function(err) {
     if (err) return next(err);
@@ -104,7 +99,46 @@ app.get('/logout', function(req, res) {
   });
 })
 
-app.post('/chat', loginRequired, function(req, res) {
+
+// auth
+
+app.get('/channel/:channelName', loginRequired, function(req, res) {
+  var key = ['presence', req.session.user.id, req.params.channelName].join(':')
+  var ttl = 1000
+  redis
+    .multi()
+    .set(key, true)
+    .expire(key, ttl)
+    .exec(function(err, multi) {
+      if (err) return next(err)
+      console.log('mullllti', multi)
+      req.session.channelName = req.params.channelName
+      res.render('layout', {
+        token: req.session.token,
+        user: req.session.user,
+      })
+    })
+});
+
+app.get('/channel/:channelName/roster', loginRequired, function(req, res) {
+  // get list of users in this room
+  redis.keys('presence:*:' + req.params.channelName, function(err, keys) {
+    if (err) return next(err)
+    if (keys.length === 0) return res.send([])
+    var userIds = keys.map(function(k) {
+      return k.split(':')[1]
+    })
+    scGet('/users', {ids: userIds.join(',')}, function(err, r) {
+      res.status(r.status).json(r.body)
+    })
+  })
+})
+
+app.get('/api/me', loginRequired, function(req, res) {
+  res.json(req.session.user)
+})
+
+app.post('/api/chat', loginRequired, function(req, res) {
   var chan = getChannel(req.session.channelName)
   var ev = {
     _event: 'chat',
@@ -116,7 +150,7 @@ app.post('/chat', loginRequired, function(req, res) {
   res.send('ok')
 })
 
-app.post('/play', loginRequired, function(req, res) {
+app.post('/api/play', loginRequired, function(req, res) {
   var chan = getChannel(req.session.channelName)
   var ev = {
     _event: 'play',
@@ -128,7 +162,7 @@ app.post('/play', loginRequired, function(req, res) {
   res.send('ok')
 })
 
-app.get('/events', sse(), function(req, res) {
+app.get('/api/events', loginRequired, sse, function(req, res) {
   var chan = getChannel(req.session.channelName)
   var onEv = function(ev) {
     res.json(ev)
@@ -139,6 +173,27 @@ app.get('/events', sse(), function(req, res) {
   })
 })
 
+
+
+// start
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log('port: ' + app.get('port'));
 });
+
+
+
+
+
+
+
+
+
+
+
+function scGet(path, query, cb) {
+  var url = 'https://api.soundcloud.com' + path + '.json';
+  query.client_id = process.env.SOUNDCLOUD_ID;
+  var req = superagent.get(url).query(query);
+  if (cb) req.end(cb);
+}

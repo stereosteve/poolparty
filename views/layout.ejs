@@ -6,12 +6,32 @@
   </head>
   <body ng-app="party" ng-controller="root">
 
-    <div style="float: right">
-      <a ng-href="#/users/{{currentUser.id}}">me</a>
-      <a href="/logout">logout</a>
+    <!-- topbar -->
+    <div id="topbar">
+      <div class="flr">
+        <a ng-href="#/users/{{currentUser.id}}">me</a>
+        <a href="/logout">logout</a>
+      </div>
+      <b>poolparty</b>
     </div>
 
-    <div style="background: #f0f0f0; padding: 20px">
+    <!-- roster -->
+    <div id="roster">
+      <div ng-repeat="user in roster" class="media">
+        <div class="img">
+          <img ng-src="{{user.avatar_url}}">
+        </div>
+        <div class="bd">
+          {{user.username}}
+        </div>
+      </div>
+    </div>
+
+    <!-- chat -->
+    <div id="chat">
+      <div ng-repeat="chat in chats">
+        <b>{{chat.user.username}}:</b> {{chat.message}}
+      </div>
       <form ng-submit="say()">
         <input type="text" ng-model="chat">
       </form>

@@ -10,6 +10,8 @@
     "ejs": "*",
     "connect-sse": "~1.0.5",
     "authom": "~0.4.17",
-    "connect-redis": "~1.4.5"
+    "connect-redis": "~1.4.5",
+    "redis": "~0.8.4",
+    "superagent": "~0.15.4"
   }
 }

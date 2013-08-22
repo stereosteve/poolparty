@@ -2,7 +2,7 @@ var PP = angular.module('party', ['ngRoute'])
 
 
 PP.factory('eventSource', function($rootScope) {
-  var source = new EventSource('/events');
+  var source = new EventSource('/api/events');
   source.addEventListener('message', function(e) {
     try {
       var data = JSON.parse(e.data)
@@ -13,6 +13,8 @@ PP.factory('eventSource', function($rootScope) {
 
     if (data._event === 'chat') {
       console.log('got de chat', data)
+      $rootScope.chats.push(data)
+      $rootScope.$apply()
     }
     else if (data._event === 'play') {
       var track = data.body.track
@@ -49,13 +51,13 @@ PP.factory('sc', function($rootScope, $q) {
 
 PP.controller('root', function($scope, sc, $location, $http) {
   $scope.playTrack = function(track) {
-    $http.post('/play', {track: track})
+    $http.post('/api/play', {track: track})
   }
   $scope.showUser = function(user) {
     $location.path('/users/' + user.id)
   }
   $scope.say = function() {
-    $http.post('/chat', {message: $scope.chat})
+    $http.post('/api/chat', {message: $scope.chat})
     $scope.chat = undefined
   }
 })
@@ -102,7 +104,11 @@ PP.config(function($routeProvider, $locationProvider) {
 
 })
 
-PP.run(function(eventSource, $rootScope) {
+PP.run(function(eventSource, $rootScope, $http) {
+  $rootScope.chats = []
   $rootScope.currentUser = USER
   console.log('party time')
+  $http.get(window.location.pathname + '/roster').success(function(roster) {
+    $rootScope.roster = roster
+  })
 })

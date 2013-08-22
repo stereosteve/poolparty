@@ -1,5 +1,9 @@
+* {
+  box-sizing: border-box;
+}
 body {
-  padding: 50px;
+  padding: 0;
+  margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -9,4 +13,51 @@ h2 {
 
 a {
   color: #999;
+}
+
+img {
+  max-width: 100%;
+}
+
+.flr {
+  float: right;
+}
+
+.media {
+  margin-bottom: 10px;
+}
+.media, .bd {overflow:hidden; _overflow:visible; zoom:1;}
+.media .img {float:left; margin-right: 10px;}
+.media .img img{display:block;}
+
+#topbar {
+  background: aliceblue;
+  padding: 0 10px;
+  height: 50px;
+  line-height: 50px;
+}
+
+#chat {
+  background: #f0f0f0;
+  padding: 10px;
+  position: fixed;
+  top: 50px;
+  left: 200px;
+  bottom: 0;
+  right: 0;
+}
+
+#roster {
+  background: #efe;
+  padding: 10px;
+  position: fixed;
+  top: 50px;
+  left: 0;
+  bottom: 0;
+  width: 200px;
+}
+
+#roster .img {
+  width: 30px;
+  height: 30px;
 }
