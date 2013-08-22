@@ -55,7 +55,6 @@ PP.factory('sc', function($rootScope, $q) {
   function onLogin() {
     localStorage.setItem('scToken', SC.accessToken())
     SC.get('/me', function(me) {
-      console.log('Welcome:', me);
       $rootScope.scUser = me
       $rootScope.$apply()
     });
@@ -65,7 +64,7 @@ PP.factory('sc', function($rootScope, $q) {
   return sc;
 })
 
-PP.controller('root', function($scope, sc, $location) {
+PP.controller('root', function($scope, sc, $location, $http) {
   $scope.login = function() {
     sc.login()
   }
@@ -85,6 +84,11 @@ PP.controller('root', function($scope, sc, $location) {
   }
   $scope.showUser = function(user) {
     $location.path('/users/' + user.id)
+  }
+  $scope.say = function() {
+    console.log('say', $scope.chat)
+    $http.post('/chat', {message: $scope.chat})
+    $scope.chat = undefined
   }
 })
 

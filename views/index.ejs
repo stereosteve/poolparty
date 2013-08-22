@@ -14,6 +14,12 @@
 
     <a ng-href="#/users/{{scUser.id}}">me</a>
 
+    <div style="background: #f0f0f0; padding: 20px">
+      <form ng-submit="say()">
+        <input type="text" ng-model="chat">
+      </form>
+    </div>
+
     <div ng-view></div>
 
 
@@ -30,7 +36,7 @@
       });
     </script>
 
-    <script src="party.js"></script>
+    <script src="/party.js"></script>
 
   </body>
 </html>

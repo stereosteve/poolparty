@@ -14,7 +14,6 @@ var express = require('express')
   , authom = require('authom')
 
 var app = express();
-var bus = new EventEmitter();
 
 var RedisStore = require('connect-redis')(express);
 var sessionStore = new RedisStore({
@@ -49,12 +48,26 @@ authom.createServer({
 authom.on("auth", function(req, res, data) {
   req.session.token = data.token;
   req.session.user = data.data;
-  var after = req.session.afterLogin || '/welcome'
+  var after = req.session.afterLogin || '/channel/main'
   res.redirect(after)
 })
 authom.on("error", function(req, res, data) {
   console.error("authom error", data);
 })
+
+
+// channels
+
+var channels = {}
+
+var getChannel = function(name) {
+  return channels[name] || makeChannel(name)
+}
+
+var makeChannel = function(name) {
+  channels[name] = new EventEmitter()
+  return channels[name]
+}
 
 
 // middleware
@@ -75,7 +88,8 @@ app.get('/', function(req, res) {
 
 app.get("/auth/:service", authom.app)
 
-app.get('/welcome', function(req, res) {
+app.get('/channel/:channelName', function(req, res) {
+  req.session.channelName = req.params.channelName
   res.render('index')
 });
 
@@ -90,20 +104,28 @@ app.get('/logout', function(req, res) {
   });
 })
 
-app.get('/events', sse(), function(req, res) {
-  var onTick = function() {
-    res.json({serverDate: new Date()});
+app.post('/chat', function(req, res) {
+  var chan = getChannel(req.session.channelName)
+  var ev = {
+    _event: 'chat',
+    message: req.body.message,
+    user: req.session.user,
   }
-  bus.on('tick', onTick)
+  chan.emit('ev', ev)
+  res.send('ok')
+})
+
+app.get('/events', sse(), function(req, res) {
+  var chan = getChannel(req.session.channelName)
+  var onEv = function(ev) {
+    res.json(ev)
+  }
+  chan.on('ev', onEv)
   req.on('close', function() {
-    bus.removeListener('tick', onTick)
+    chan.removeListener('ev', onEv)
   })
 })
 
-setInterval(function() {
-  bus.emit('tick')
-}, 1000);
-
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+  console.log('port: ' + app.get('port'));
 });
