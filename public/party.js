@@ -109,7 +109,11 @@ PP.run(function(eventSource, $rootScope, $http) {
   $rootScope.chats = []
   $rootScope.currentUser = USER
   console.log('party time')
-  $http.get(window.location.pathname + '/roster').success(function(roster) {
+  $http.get(BASE + '/roster').success(function(roster) {
     $rootScope.roster = roster
+  })
+  $http.get(BASE + '/chat_history').success(function(chats) {
+    $rootScope.roster = roster
+    $rootScope.chats = chats
   })
 })

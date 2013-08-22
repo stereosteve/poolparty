@@ -142,10 +142,17 @@ app.get('/room/:roomName/roster', function(req, res, next) {
   })
 })
 
-
+app.get('/room/:roomName/chat_history', function(req, res, next) {
+  redis.lrange('chat:' + req.params.roomName, -100, -1, function(err, chats) {
+    if (err) return next(err)
+    chats = chats.map(JSON.parse)
+    res.json(chats)
+  })
+})
 
 app.post('/room/:roomName/chat', function(req, res, next) {
   var chan = getChannel(req.session.roomName)
+  var key = ['chat', req.params.roomName].join(':')
   var ev = {
     _event: 'chat',
     message: req.body.message,
@@ -153,6 +160,7 @@ app.post('/room/:roomName/chat', function(req, res, next) {
     time: new Date(),
   }
   chan.emit('ev', ev)
+  redis.rpush(key, JSON.stringify(ev))
   res.send('ok')
 })
 
