@@ -109,8 +109,12 @@ app.get('/whoami', loginRequired, function(req, res, next) {
 })
 
 app.all('/room*', loginRequired)
+app.all('/room/:roomName', updatePresence)
+app.all('/room/:roomName*', updatePresence)
+app.all('/room/:roomName*', getChan)
 
-app.get('/room/:roomName', function(req, res, next) {
+function updatePresence(req, res, next) {
+  next()
   var key = ['presence', req.session.user.id, req.params.roomName].join(':')
   var ttl = 1000
   redis
@@ -118,14 +122,20 @@ app.get('/room/:roomName', function(req, res, next) {
     .set(key, true)
     .expire(key, ttl)
     .exec(function(err, multi) {
-      if (err) return next(err)
-      console.log('mullllti', multi)
-      req.session.roomName = req.params.roomName
-      res.render('layout', {
-        token: req.session.token,
-        user: req.session.user,
-      })
+      console.log('update presence', key, err, multi)
     })
+}
+
+function getChan(req, res, next) {
+  req.chan = getChannel(req.params.roomName)
+  next()
+}
+
+app.get('/room/:roomName', function(req, res, next) {
+  res.render('layout', {
+    token: req.session.token,
+    user: req.session.user,
+  })
 });
 
 app.get('/room/:roomName/roster', function(req, res, next) {
@@ -151,7 +161,6 @@ app.get('/room/:roomName/chat_history', function(req, res, next) {
 })
 
 app.post('/room/:roomName/chat', function(req, res, next) {
-  var chan = getChannel(req.session.roomName)
   var key = ['chat', req.params.roomName].join(':')
   var ev = {
     _event: 'chat',
@@ -159,31 +168,29 @@ app.post('/room/:roomName/chat', function(req, res, next) {
     user: req.session.user,
     time: new Date(),
   }
-  chan.emit('ev', ev)
+  req.chan.emit('ev', ev)
   redis.rpush(key, JSON.stringify(ev))
   res.send('ok')
 })
 
 app.post('/room/:roomName/play', function(req, res, next) {
-  var chan = getChannel(req.session.roomName)
   var ev = {
     _event: 'play',
     body: req.body,
     user: req.session.user,
     time: new Date(),
   }
-  chan.emit('ev', ev)
+  req.chan.emit('ev', ev)
   res.send('ok')
 })
 
 app.get('/room/:roomName/events', sse, function(req, res, next) {
-  var chan = getChannel(req.session.roomName)
   var onEv = function(ev) {
     res.json(ev)
   }
-  chan.on('ev', onEv)
+  req.chan.on('ev', onEv)
   req.on('close', function() {
-    chan.removeListener('ev', onEv)
+    req.chan.removeListener('ev', onEv)
   })
 })
 
