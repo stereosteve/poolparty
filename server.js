@@ -43,6 +43,7 @@ app.use(app.router);
 app.use(express.errorHandler());
 
 
+
 // authom
 
 authom.createServer({
@@ -53,7 +54,7 @@ authom.createServer({
 authom.on("auth", function(req, res, data) {
   req.session.token = data.token;
   req.session.user = data.data;
-  var after = req.session.afterLogin || '/channel/main'
+  var after = req.session.afterLogin || '/room/main'
   res.redirect(after)
 })
 authom.on("error", function(req, res, data) {
@@ -61,23 +62,24 @@ authom.on("error", function(req, res, data) {
 })
 
 
-// channels
+// rooms
 
-var channels = {}
+var rooms = {}
 
 var getChannel = function(name) {
-  return channels[name] || makeChannel(name)
+  return rooms[name] || makeChannel(name)
 }
 
 var makeChannel = function(name) {
-  channels[name] = new EventEmitter()
-  return channels[name]
+  rooms[name] = new EventEmitter()
+  return rooms[name]
 }
 
 
 // middleware
 
-var loginRequired = function(req, res, next) {
+function loginRequired(req, res, next) {
+  console.log('loginRequired', req.path)
   if (req.session.user) return next()
   req.session.afterLogin = req.url
   res.redirect('/auth/soundcloud')
@@ -86,13 +88,13 @@ var loginRequired = function(req, res, next) {
 // no auth
 
 
-app.get('/', function(req, res) {
+app.get('/', function(req, res, next) {
   res.render('home')
 });
 
 app.get("/auth/:service", authom.app)
 
-app.get('/logout', function(req, res) {
+app.get('/logout', function(req, res, next) {
   req.session.destroy(function(err) {
     if (err) return next(err);
     res.redirect('/');
@@ -102,8 +104,14 @@ app.get('/logout', function(req, res) {
 
 // auth
 
-app.get('/channel/:channelName', loginRequired, function(req, res) {
-  var key = ['presence', req.session.user.id, req.params.channelName].join(':')
+app.get('/whoami', loginRequired, function(req, res, next) {
+  res.json(req.session.user)
+})
+
+app.all('/room*', loginRequired)
+
+app.get('/room/:roomName', function(req, res, next) {
+  var key = ['presence', req.session.user.id, req.params.roomName].join(':')
   var ttl = 1000
   redis
     .multi()
@@ -112,7 +120,7 @@ app.get('/channel/:channelName', loginRequired, function(req, res) {
     .exec(function(err, multi) {
       if (err) return next(err)
       console.log('mullllti', multi)
-      req.session.channelName = req.params.channelName
+      req.session.roomName = req.params.roomName
       res.render('layout', {
         token: req.session.token,
         user: req.session.user,
@@ -120,9 +128,9 @@ app.get('/channel/:channelName', loginRequired, function(req, res) {
     })
 });
 
-app.get('/channel/:channelName/roster', loginRequired, function(req, res) {
+app.get('/room/:roomName/roster', function(req, res, next) {
   // get list of users in this room
-  redis.keys('presence:*:' + req.params.channelName, function(err, keys) {
+  redis.keys('presence:*:' + req.params.roomName, function(err, keys) {
     if (err) return next(err)
     if (keys.length === 0) return res.send([])
     var userIds = keys.map(function(k) {
@@ -134,12 +142,10 @@ app.get('/channel/:channelName/roster', loginRequired, function(req, res) {
   })
 })
 
-app.get('/api/me', loginRequired, function(req, res) {
-  res.json(req.session.user)
-})
 
-app.post('/api/chat', loginRequired, function(req, res) {
-  var chan = getChannel(req.session.channelName)
+
+app.post('/room/:roomName/chat', function(req, res, next) {
+  var chan = getChannel(req.session.roomName)
   var ev = {
     _event: 'chat',
     message: req.body.message,
@@ -150,8 +156,8 @@ app.post('/api/chat', loginRequired, function(req, res) {
   res.send('ok')
 })
 
-app.post('/api/play', loginRequired, function(req, res) {
-  var chan = getChannel(req.session.channelName)
+app.post('/room/:roomName/play', function(req, res, next) {
+  var chan = getChannel(req.session.roomName)
   var ev = {
     _event: 'play',
     body: req.body,
@@ -162,8 +168,8 @@ app.post('/api/play', loginRequired, function(req, res) {
   res.send('ok')
 })
 
-app.get('/api/events', loginRequired, sse, function(req, res) {
-  var chan = getChannel(req.session.channelName)
+app.get('/room/:roomName/events', sse, function(req, res, next) {
+  var chan = getChannel(req.session.roomName)
   var onEv = function(ev) {
     res.json(ev)
   }
@@ -180,9 +186,6 @@ app.get('/api/events', loginRequired, sse, function(req, res) {
 http.createServer(app).listen(app.get('port'), function(){
   console.log('port: ' + app.get('port'));
 });
-
-
-
 
 
 

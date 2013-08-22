@@ -1,8 +1,9 @@
 var PP = angular.module('party', ['ngRoute'])
+var BASE = window.location.pathname
 
 
 PP.factory('eventSource', function($rootScope) {
-  var source = new EventSource('/api/events');
+  var source = new EventSource(BASE + '/events');
   source.addEventListener('message', function(e) {
     try {
       var data = JSON.parse(e.data)
@@ -51,13 +52,13 @@ PP.factory('sc', function($rootScope, $q) {
 
 PP.controller('root', function($scope, sc, $location, $http) {
   $scope.playTrack = function(track) {
-    $http.post('/api/play', {track: track})
+    $http.post(BASE + '/play', {track: track})
   }
   $scope.showUser = function(user) {
     $location.path('/users/' + user.id)
   }
   $scope.say = function() {
-    $http.post('/api/chat', {message: $scope.chat})
+    $http.post(BASE + '/chat', {message: $scope.chat})
     $scope.chat = undefined
   }
 })
