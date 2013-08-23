@@ -19,9 +19,18 @@ PP.factory('eventSource', function($rootScope) {
     }
     else if (data._event === 'play') {
       var track = data.body.track
+      $('.loadHead,.playHead').css('width', 0)
+      $rootScope.currentTrack = track
+      $rootScope.$apply()
       SC.stream(track.stream_url, {
         ontimedcomments: function(comments){
           console.log(comments);
+        },
+        whileplaying: function() {
+          var percentLoaded = this.bytesLoaded / this.bytesTotal * 100
+          var percentPlayed = this.position / this.durationEstimate * 100
+          $('.loadHead').css('width', percentLoaded + '%')
+          $('.playHead').css('width', percentPlayed + '%')
         }
       }, function(sound) {
         soundManager.stopAll()
@@ -66,12 +75,6 @@ PP.controller('chatCtrl', function($scope, $http) {
   }
 })
 
-PP.filter('debug', function() {
-  return function(obj) {
-    return JSON.stringify(obj, undefined, 2)
-  }
-})
-
 PP.controller('userCtrl', function($scope, user, sc) {
   $scope.user = user
   sc.get('/users/' + user.id + '/followers').then(function(data) {
@@ -88,6 +91,17 @@ PP.controller('userCtrl', function($scope, user, sc) {
   })
 })
 
+PP.directive('ppTrack', function() {
+  return {
+    templateUrl: '/html/track.html',
+  }
+})
+
+PP.directive('ppUserTile', function() {
+  return {
+    templateUrl: '/html/userTile.html',
+  }
+})
 
 PP.config(function($routeProvider, $locationProvider) {
   // $locationProvider.html5Mode(true)

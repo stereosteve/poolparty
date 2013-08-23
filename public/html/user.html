@@ -1,30 +1,33 @@
-<h2>{{user.full_name}}</h2>
-<img ng-src="{{user.avatar_url}}">
+<div class="userPage">
 
-<h3>Tracks</h3>
-<div ng-repeat="track in tracks" ng-click="playTrack(track)">
-  <h5>{{track.title}}</h5>
-  <p>{{track.description}}</p>
+  <div class="userInfo media">
+    <div class="img">
+      <img ng-src="{{user.avatar_url}}">
+    </div>
+    <div class="bd">
+      <h2>{{user.full_name}}</h2>
+    </div>
+  </div>
+
+
+  <div class="pad">
+    <h3>Tracks</h3>
+    <div ng-repeat="track in tracks" ng-click="playTrack(track)" pp-track></div>
+
+    <h3>Favorites</h3>
+    <div ng-repeat="track in favorites" ng-click="playTrack(track)" pp-track></div>
+
+    <h3>Followers</h3>
+    <div ng-repeat="user in followers" ng-click="showUser(user)" pp-user-tile></div>
+
+    <div class="clear"></div>
+
+    <h3>Followings</h3>
+    <div ng-repeat="user in followings" ng-click="showUser(user)" pp-user-tile></div>
+
+    <div class="clear"></div>
+
+  </div>
+
+
 </div>
-
-<h3>Favorites</h3>
-<div ng-repeat="track in favorites" ng-click="playTrack(track)">
-  <h5>{{track.title}}</h5>
-  <p>{{track.description}}</p>
-  <pre>{{track | debug}}</pre>
-</div>
-
-<h3>Followers</h3>
-<div ng-repeat="user in followers" ng-click="showUser(user)" class="userTile">
-  <img ng-src="{{user.avatar_url}}">
-  <div class="info">{{user.username}}</div>
-</div>
-
-<h3>Followings</h3>
-<div ng-repeat="user in followings" ng-click="showUser(user)" class="userTile">
-  <img ng-src="{{user.avatar_url}}">
-  <div class="info">{{user.username}}</div>
-</div>
-
-
-<!-- <pre>{{user | debug}}</pre> -->

@@ -1,0 +1,9 @@
+<div class="track">
+  <div class="info">
+    <b>{{track.title}}</b>
+    <small>{{track.description | limitTo:100}}</small>
+  </div>
+  <div class="wave">
+    <img ng-src="{{track.waveform_url}}">
+  </div>
+</div>

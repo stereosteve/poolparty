@@ -1,5 +1,7 @@
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 body {
   padding: 0;
@@ -8,11 +10,10 @@ body {
 }
 
 h2 {
-  color: #ccc;
 }
 
 a {
-  color: #999;
+  color: orange;
 }
 
 img {
@@ -25,6 +26,14 @@ img {
 
 .clickable {
   cursor: pointer;
+}
+
+.pad {
+  padding: 20px;
+}
+
+.clear {
+  clear: both;
 }
 
 .media {
@@ -47,7 +56,7 @@ img {
   position: fixed;
   top: 50px;
   left: 200px;
-  bottom: 0;
+  bottom: 100px;
   right: 0;
   overflow: auto;
 }
@@ -73,11 +82,74 @@ img {
   position: fixed;
   top: 50px;
   left: 0;
-  bottom: 0;
+  bottom: 100px;
   width: 200px;
 }
 
 #roster .img {
   width: 30px;
   height: 30px;
+}
+
+#player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: #ccc;
+  border-top: 1px solid #333;
+}
+
+#player .waveform {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+}
+
+.loadHead, .playHead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.loadHead {
+  background: #2d2d2d;
+}
+.playHead {
+  background: orange;
+}
+
+
+
+.userInfo {
+  background: whitesmoke;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.userTile {
+  width: 100px;
+  height: 120px;
+  overflow: hidden;
+  float: left;
+  margin: 10px;
+  border: 1px solid #ccc;
+}
+
+
+
+.track {
+  margin: 10px 0;
+  background: #ddd;
+}
+.track .wave {
+  background: #333;
+  height: 70px;
+}
+.track .wave img {
+  width: 100%;
+  height: 100%;
 }

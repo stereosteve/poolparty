@@ -31,6 +31,13 @@
     <!-- main -->
     <div id="main" ng-view></div>
 
+    <!-- player -->
+    <div id="player">
+      <img class="waveform" ng-src="{{currentTrack.waveform_url}}">
+      <div class="loadHead"></div>
+      <div class="playHead"></div>
+    </div>
+
 
     <!-- libs -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
