@@ -29,8 +29,10 @@
 
     <!-- chat -->
     <div id="chat">
-      <div ng-repeat="chat in chats">
-        <b>{{chat.user.username}}:</b> {{chat.message}}
+      <div class="chats">
+        <div class="chat" ng-repeat="chat in chats">
+          <b>{{chat.user.username}}:</b> {{chat.message}}
+        </div>
       </div>
       <form ng-submit="say()">
         <input type="text" ng-model="chat">

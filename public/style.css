@@ -31,15 +31,15 @@ img {
 .media .img img{display:block;}
 
 #topbar {
-  background: aliceblue;
+  background: #2d2d2d;
+  color: orange;
+  border-top: 2px solid orange;
   padding: 0 10px;
   height: 50px;
   line-height: 50px;
 }
 
 #chat {
-  background: #f0f0f0;
-  padding: 10px;
   position: fixed;
   top: 50px;
   left: 200px;
@@ -47,8 +47,23 @@ img {
   right: 0;
 }
 
+#chat .chats {
+}
+#chat .chat {
+  padding: 4px;
+  border-bottom: 1px solid #f7f7f7;
+}
+#chat form {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: #ccc;
+  padding: 5px;
+}
+
 #roster {
-  background: #efe;
+  background: #f7f7f7;
+  border-right: 1px solid #ccc;
   padding: 10px;
   position: fixed;
   top: 50px;
