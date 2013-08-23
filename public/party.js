@@ -57,6 +57,9 @@ PP.controller('root', function($scope, sc, $location, $http) {
   $scope.showUser = function(user) {
     $location.path('/users/' + user.id)
   }
+})
+
+PP.controller('chatCtrl', function($scope, $http) {
   $scope.say = function() {
     $http.post(BASE + '/chat', {message: $scope.chat})
     $scope.chat = undefined
@@ -99,8 +102,8 @@ PP.config(function($routeProvider, $locationProvider) {
     },
     controller: 'userCtrl'
   })
-  .when('/tick', {
-    template: 'tick tock',
+  .when('/', {
+    templateUrl: '/html/chat.html',
   })
 
 })

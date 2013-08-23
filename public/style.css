@@ -23,6 +23,10 @@ img {
   float: right;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .media {
   margin-bottom: 10px;
 }
@@ -39,12 +43,13 @@ img {
   line-height: 50px;
 }
 
-#chat {
+#main {
   position: fixed;
   top: 50px;
   left: 200px;
   bottom: 0;
   right: 0;
+  overflow: auto;
 }
 
 #chat .chats {

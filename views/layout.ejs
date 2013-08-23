@@ -4,11 +4,12 @@
     <title>party</title>
     <link rel='stylesheet' href='/style.css' />
   </head>
-  <body ng-app="party" ng-controller="root">
+  <body ng-app="party" ng-controller="root" ng-cloak>
 
     <!-- topbar -->
     <div id="topbar">
       <div class="flr">
+        <a ng-href="#/">chat</a>
         <a ng-href="#/users/{{currentUser.id}}">me</a>
         <a href="/logout">logout</a>
       </div>
@@ -17,7 +18,7 @@
 
     <!-- roster -->
     <div id="roster">
-      <div ng-repeat="user in roster" class="media">
+      <div ng-repeat="user in roster" class="media clickable" ng-click="showUser(user)">
         <div class="img">
           <img ng-src="{{user.avatar_url}}">
         </div>
@@ -27,19 +28,8 @@
       </div>
     </div>
 
-    <!-- chat -->
-    <div id="chat">
-      <div class="chats">
-        <div class="chat" ng-repeat="chat in chats">
-          <b>{{chat.user.username}}:</b> {{chat.message}}
-        </div>
-      </div>
-      <form ng-submit="say()">
-        <input type="text" ng-model="chat">
-      </form>
-    </div>
-
-    <div ng-view></div>
+    <!-- main -->
+    <div id="main" ng-view></div>
 
 
     <!-- libs -->
