@@ -10,3 +10,15 @@
     </div>
   </div>
 </div>
+
+
+<div class="pad">
+  <h2>Queue</h2>
+  <div>
+    <button ng-click="skip()">skip</button>
+  </div>
+
+  <div ng-repeat="item in queue">
+    {{item.track.title}}
+  </div>
+</div>

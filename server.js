@@ -116,7 +116,7 @@ app.all('/room/:roomName*', getChan)
 function updatePresence(req, res, next) {
   next()
   var key = ['presence', req.session.user.id, req.params.roomName].join(':')
-  var ttl = 1000
+  var ttl = 100000
   redis
     .multi()
     .set(key, true)
@@ -180,6 +180,22 @@ app.post('/room/:roomName/chat', function(req, res, next) {
   req.chan.emit('ev', ev)
   var key = [req.params.roomName, ev._event].join(':')
   redis.rpush(key, JSON.stringify(ev))
+  res.send('ok')
+})
+
+app.post('/room/:roomName/skip', function(req, res, next) {
+  // increment skip count
+  // if skip count is high enough - emit skip
+  var ev = {
+    _event: 'skip',
+    user: req.session.user,
+    time: new Date(),
+  }
+  var key = [req.params.roomName, 'queue'].join(':')
+  redis.lpop(key, function(err, play) {
+    console.log('le play', play)
+  })
+  req.chan.emit('ev', ev)
   res.send('ok')
 })
 

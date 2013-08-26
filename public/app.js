@@ -18,7 +18,11 @@ PP.factory('eventSource', function($rootScope) {
       $rootScope.$apply()
     }
     else if (data._event === 'queue') {
-      var track = data.track
+      $rootScope.queue.push(data)
+    }
+    else if (data._event === 'skip') {
+      var play = $rootScope.queue.shift()
+      var track = play.track
       $('.loadHead,.playHead').css('width', 0)
       $rootScope.currentTrack = track
       $rootScope.$apply()
@@ -65,6 +69,9 @@ PP.controller('root', function($scope, sc, $location, $http) {
   }
   $scope.showUser = function(user) {
     $location.path('/users/' + user.id)
+  }
+  $scope.skip = function() {
+    $http.post(BASE + '/skip')
   }
 })
 
@@ -134,5 +141,11 @@ PP.run(function(eventSource, $rootScope, $http) {
   })
   $http.get(BASE + '/chat_history').success(function(chats) {
     $rootScope.chats = chats
+  })
+  $http.get(BASE + '/queue').success(function(data) {
+    $rootScope.queue = data
+  })
+  SC.whenStreamingReady(function() {
+    console.log('streaming ready!')
   })
 })
