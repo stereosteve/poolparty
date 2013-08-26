@@ -144,6 +144,13 @@ app.get('/room/:roomName/chat_history', function(req, res, next) {
   })
 })
 
+app.get('/room/:roomName/now_playing', function(req, res, next) {
+  req.room.getNowPlaying(function(err, data) {
+    if (err) return next(err)
+    res.json(data)
+  })
+})
+
 app.get('/room/:roomName/queue', function(req, res, next) {
   req.room.getQueue(function(err, data) {
     if (err) return next(err)

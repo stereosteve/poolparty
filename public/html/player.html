@@ -1,11 +1,11 @@
 <div class="pad">
   <div id="player">
-    <img class="waveform" ng-src="{{currentTrack.waveform_url}}">
+    <img class="waveform" ng-src="{{nowPlaying.track.waveform_url}}">
     <div class="loadHead"></div>
     <div class="playHead"></div>
     <div class="info">
       <div>
-        <a ng-href="{{currentTrack.permalink_url}}" target="_blank">{{currentTrack.title}}</a>
+        <a ng-href="{{nowPlaying.track.permalink_url}}" target="_blank">{{nowPlaying.track.title}}</a>
       </div>
     </div>
   </div>

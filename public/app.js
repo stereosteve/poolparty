@@ -13,35 +13,18 @@ PP.factory('eventSource', function($rootScope) {
     console.log(data);
 
     if (data.type === 'chat') {
-      console.log('got de chat', data)
       $rootScope.chats.push(data)
-      $rootScope.$apply()
     }
     else if (data.type === 'enqueue') {
       $rootScope.queue.push(data)
     }
-    else if (data.type === 'play') {
+    else if (data.type === 'nowPlaying') {
       // Should we assume a play is the next track on the queue?
-      var play = $rootScope.queue.shift()
-      var track = play.track
-      $('.loadHead,.playHead').css('width', 0)
-      $rootScope.currentTrack = track
-      $rootScope.$apply()
-      SC.stream(track.stream_url, {
-        ontimedcomments: function(comments){
-          console.log(comments);
-        },
-        whileplaying: function() {
-          var percentLoaded = this.bytesLoaded / this.bytesTotal * 100
-          var percentPlayed = this.position / this.durationEstimate * 100
-          $('.loadHead').css('width', percentLoaded + '%')
-          $('.playHead').css('width', percentPlayed + '%')
-        }
-      }, function(sound) {
-        soundManager.stopAll()
-        sound.play()
-      });
+      $rootScope.queue.shift()
+      $rootScope.nowPlaying = data
     }
+
+    $rootScope.$apply()
 
   }, false);
 })
@@ -146,7 +129,37 @@ PP.run(function(eventSource, $rootScope, $http) {
   $http.get(BASE + '/queue').success(function(data) {
     $rootScope.queue = data
   })
+  $http.get(BASE + '/now_playing').success(function(data) {
+    // $rootScope.queue = data
+    console.log('nowPlaying', data)
+    $rootScope.nowPlaying = data
+  })
+
   SC.whenStreamingReady(function() {
     console.log('streaming ready!')
   })
+
+
+  $rootScope.$watch('nowPlaying', function(play) {
+    if (!play) return
+    var track = play.track
+    $('.loadHead,.playHead').css('width', 0)
+    SC.stream(track.stream_url, {
+      ontimedcomments: function(comments){
+        console.log(comments);
+      },
+      whileplaying: function() {
+        var percentLoaded = this.bytesLoaded / this.bytesTotal * 100
+        var percentPlayed = this.position / this.durationEstimate * 100
+        $('.loadHead').css('width', percentLoaded + '%')
+        $('.playHead').css('width', percentPlayed + '%')
+      }
+    }, function(sound) {
+      soundManager.stopAll()
+      sound.play()
+    });
+  })
+
+
+
 })
