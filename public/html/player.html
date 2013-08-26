@@ -1,5 +1,12 @@
-<div id="player">
-  <img class="waveform" ng-src="{{currentTrack.waveform_url}}">
-  <div class="loadHead"></div>
-  <div class="playHead"></div>
+<div class="pad">
+  <div id="player">
+    <img class="waveform" ng-src="{{currentTrack.waveform_url}}">
+    <div class="loadHead"></div>
+    <div class="playHead"></div>
+    <div class="info">
+      <div>
+        <a ng-href="{{currentTrack.permalink_url}}" target="_blank">{{currentTrack.title}}</a>
+      </div>
+    </div>
+  </div>
 </div>

@@ -116,6 +116,9 @@ PP.config(function($routeProvider, $locationProvider) {
     },
     controller: 'userCtrl'
   })
+  .when('/player', {
+    templateUrl: '/html/player.html',
+  })
   .when('/', {
     templateUrl: '/html/chat.html',
   })

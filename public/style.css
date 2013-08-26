@@ -43,22 +43,29 @@ img {
 .media .img {float:left; margin-right: 10px;}
 .media .img img{display:block;}
 
-#topbar {
-  background: #2d2d2d;
-  color: orange;
-  border-top: 2px solid orange;
-  padding: 0 10px;
-  height: 50px;
+
+#menu {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 75px;
+  padding: 10px;
+  background: white;
+  border-right: 1px solid #ccc;
+}
+
+#menu a {
+  text-decoration: none;
+  display: block;
+  font-size: 25px;
+  text-align: center;
   line-height: 50px;
 }
 
+
 #main {
-  position: fixed;
-  top: 50px;
-  bottom: 100px;
-  left: 0;
-  right: 0;
-  overflow: auto;
+  margin-left: 75px;
 }
 
 
@@ -66,23 +73,31 @@ img {
 
 
 
-#chat .main {
+#chat .chats {
   position: fixed;
-  top: 50px;
-  bottom: 100px;
-  left: 200px;
+  top: 0;
+  bottom: 40px;
+  left: 275px;
   right: 0;
-  overflow: auto;
+  overflow-y: auto;
 }
 #chat .chat {
   padding: 4px;
   border-bottom: 1px solid #f7f7f7;
 }
 #chat form {
-  position: absolute;
+  position: fixed;
   bottom: 0;
+  left: 275px;
+  right: 0;
+  height: 40px;
+  background: #f7f7f7;
+  border-top: 1px solid #ccc;
+  padding: 5px;
+}
+#chat .input {
+  border: 1px solid #ccc;
   width: 100%;
-  background: #ccc;
   padding: 5px;
 }
 
@@ -91,9 +106,9 @@ img {
   border-right: 1px solid #ccc;
   padding: 10px;
   position: fixed;
-  top: 50px;
-  left: 0;
-  bottom: 100px;
+  top: 0;
+  left: 75px;
+  bottom: 0;
   width: 200px;
 }
 
@@ -108,13 +123,9 @@ img {
 
 
 #player {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  width: 100%;
   height: 100px;
-  background: #ccc;
-  border-top: 1px solid #333;
+  position: relative;
 }
 
 #player .waveform {
@@ -122,6 +133,15 @@ img {
   height: 100%;
   position: absolute;
   z-index: 1;
+}
+
+#player .info {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+  z-index: 2;
+  background: rgba(0,0,0,0.8);
 }
 
 .loadHead, .playHead {
