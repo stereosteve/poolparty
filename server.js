@@ -153,15 +153,24 @@ app.get('/room/:roomName/roster', function(req, res, next) {
 })
 
 app.get('/room/:roomName/chat_history', function(req, res, next) {
-  redis.lrange('chat:' + req.params.roomName, -100, -1, function(err, chats) {
+  var key = [req.params.roomName, 'chat'].join(':')
+  redis.lrange(key, -100, -1, function(err, chats) {
     if (err) return next(err)
     chats = chats.map(JSON.parse)
     res.json(chats)
   })
 })
 
+app.get('/room/:roomName/queue', function(req, res, next) {
+  var key = [req.params.roomName, 'queue'].join(':')
+  redis.lrange(key, -100, -1, function(err, data) {
+    if (err) return next(err)
+    data = data.map(JSON.parse)
+    res.json(data)
+  })
+})
+
 app.post('/room/:roomName/chat', function(req, res, next) {
-  var key = ['chat', req.params.roomName].join(':')
   var ev = {
     _event: 'chat',
     message: req.body.message,
@@ -169,6 +178,7 @@ app.post('/room/:roomName/chat', function(req, res, next) {
     time: new Date(),
   }
   req.chan.emit('ev', ev)
+  var key = [req.params.roomName, ev._event].join(':')
   redis.rpush(key, JSON.stringify(ev))
   res.send('ok')
 })
@@ -184,6 +194,19 @@ app.post('/room/:roomName/play', function(req, res, next) {
   res.send('ok')
 })
 
+app.post('/room/:roomName/queue', function(req, res, next) {
+  var ev = {
+    _event: 'queue',
+    track: req.body.track,
+    user: req.session.user,
+    time: new Date(),
+  }
+  req.chan.emit('ev', ev)
+  var key = [req.params.roomName, ev._event].join(':')
+  redis.rpush(key, JSON.stringify(ev))
+  res.send('ok')
+})
+
 app.get('/room/:roomName/events', sse, function(req, res, next) {
   var onEv = function(ev) {
     res.json(ev)
@@ -193,6 +216,8 @@ app.get('/room/:roomName/events', sse, function(req, res, next) {
     req.chan.removeListener('ev', onEv)
   })
 })
+
+
 
 
 

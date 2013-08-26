@@ -1,10 +1,22 @@
 <div id="chat" ng-controller="chatCtrl">
-  <div class="chats">
-    <div class="chat" ng-repeat="chat in chats">
-      <b>{{chat.user.username}}:</b> {{chat.message}}
+  <div class="roster">
+    <div ng-repeat="user in roster" class="media clickable" ng-click="showUser(user)">
+      <div class="img">
+        <img ng-src="{{user.avatar_url}}">
+      </div>
+      <div class="bd">
+        {{user.username}}
+      </div>
     </div>
   </div>
-  <form ng-submit="say()">
-    <input type="text" ng-model="chat">
-  </form>
+  <div class="main">
+    <div class="chats">
+      <div class="chat" ng-repeat="chat in chats">
+        <b>{{chat.user.username}}:</b> {{chat.message}}
+      </div>
+    </div>
+    <form ng-submit="say()">
+      <input type="text" ng-model="chat">
+    </form>
+  </div>
 </div>

@@ -17,8 +17,8 @@ PP.factory('eventSource', function($rootScope) {
       $rootScope.chats.push(data)
       $rootScope.$apply()
     }
-    else if (data._event === 'play') {
-      var track = data.body.track
+    else if (data._event === 'queue') {
+      var track = data.track
       $('.loadHead,.playHead').css('width', 0)
       $rootScope.currentTrack = track
       $rootScope.$apply()
@@ -61,7 +61,7 @@ PP.factory('sc', function($rootScope, $q) {
 
 PP.controller('root', function($scope, sc, $location, $http) {
   $scope.playTrack = function(track) {
-    $http.post(BASE + '/play', {track: track})
+    $http.post(BASE + '/queue', {track: track})
   }
   $scope.showUser = function(user) {
     $location.path('/users/' + user.id)
@@ -130,7 +130,6 @@ PP.run(function(eventSource, $rootScope, $http) {
     $rootScope.roster = roster
   })
   $http.get(BASE + '/chat_history').success(function(chats) {
-    $rootScope.roster = roster
     $rootScope.chats = chats
   })
 })

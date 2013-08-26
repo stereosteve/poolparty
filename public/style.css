@@ -55,13 +55,24 @@ img {
 #main {
   position: fixed;
   top: 50px;
-  left: 200px;
   bottom: 100px;
+  left: 0;
   right: 0;
   overflow: auto;
 }
 
-#chat .chats {
+
+
+
+
+
+#chat .main {
+  position: fixed;
+  top: 50px;
+  bottom: 100px;
+  left: 200px;
+  right: 0;
+  overflow: auto;
 }
 #chat .chat {
   padding: 4px;
@@ -75,7 +86,7 @@ img {
   padding: 5px;
 }
 
-#roster {
+#chat .roster {
   background: #f7f7f7;
   border-right: 1px solid #ccc;
   padding: 10px;
@@ -86,10 +97,15 @@ img {
   width: 200px;
 }
 
-#roster .img {
+.roster .img {
   width: 30px;
   height: 30px;
 }
+
+
+
+
+
 
 #player {
   position: fixed;

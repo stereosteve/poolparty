@@ -7,36 +7,14 @@
   <body ng-app="party" ng-controller="root" ng-cloak>
 
     <!-- topbar -->
-    <div id="topbar">
-      <div class="flr">
-        <a ng-href="#/">chat</a>
-        <a ng-href="#/users/{{currentUser.id}}">me</a>
-        <a href="/logout">logout</a>
-      </div>
-      <b>poolparty</b>
-    </div>
-
-    <!-- roster -->
-    <div id="roster">
-      <div ng-repeat="user in roster" class="media clickable" ng-click="showUser(user)">
-        <div class="img">
-          <img ng-src="{{user.avatar_url}}">
-        </div>
-        <div class="bd">
-          {{user.username}}
-        </div>
-      </div>
-    </div>
+    <div ng-include="'/html/topbar.html'"></div>
 
     <!-- main -->
     <div id="main" ng-view></div>
 
     <!-- player -->
-    <div id="player">
-      <img class="waveform" ng-src="{{currentTrack.waveform_url}}">
-      <div class="loadHead"></div>
-      <div class="playHead"></div>
-    </div>
+    <div ng-include="'/html/player.html'"></div>
+
 
 
     <!-- libs -->
