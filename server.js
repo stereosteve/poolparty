@@ -19,16 +19,10 @@ var express = require('express')
   , sse = require('connect-sse')()
   , EventEmitter = require('events').EventEmitter
   , authom = require('authom')
-  , Redis = require('redis')
   , superagent = require('superagent')
+  , Room = require('./lib/room')
 
 var app = express();
-var redis = Redis.createClient();
-
-redis.select(process.env.REDIS_DB)
-redis.on("error", function (err) {
-    console.error("redis error", err);
-});
 
 var RedisStore = require('connect-redis')(express);
 var sessionStore = new RedisStore({
@@ -73,13 +67,9 @@ authom.on("error", function(req, res, data) {
 
 var rooms = {}
 
-var getChannel = function(name) {
+var getRoom = function(name) {
+  rooms[name] = rooms[name] || new Room(name)
   return rooms[name] || makeChannel(name)
-}
-
-var makeChannel = function(name) {
-  rooms[name] = new EventEmitter()
-  return rooms[name]
 }
 
 
@@ -116,26 +106,18 @@ app.get('/whoami', loginRequired, function(req, res, next) {
 })
 
 app.all('/room*', loginRequired)
+
+app.all('/room/:roomName*', function(req, res, next) {
+  req.room = getRoom(req.params.roomName)
+  next()
+})
+
 app.all('/room/:roomName', updatePresence)
 app.all('/room/:roomName*', updatePresence)
-app.all('/room/:roomName*', getChan)
 
 function updatePresence(req, res, next) {
   next()
-  var key = ['presence', req.session.user.id, req.params.roomName].join(':')
-  var ttl = 100000
-  redis
-    .multi()
-    .set(key, true)
-    .expire(key, ttl)
-    .exec(function(err, multi) {
-      console.log('update presence', key, err, multi)
-    })
-}
-
-function getChan(req, res, next) {
-  req.chan = getChannel(req.params.roomName)
-  next()
+  req.room.visitBy(req.session.user)
 }
 
 app.get('/room/:roomName', function(req, res, next) {
@@ -146,97 +128,56 @@ app.get('/room/:roomName', function(req, res, next) {
 });
 
 app.get('/room/:roomName/roster', function(req, res, next) {
-  // get list of users in this room
-  redis.keys('presence:*:' + req.params.roomName, function(err, keys) {
+  req.room.getUserIds(function(err, userIds) {
     if (err) return next(err)
-    if (keys.length === 0) return res.send([])
-    var userIds = keys.map(function(k) {
-      return k.split(':')[1]
-    })
     scGet('/users', {ids: userIds.join(',')}, function(err, r) {
+      if (err) return next(err)
       res.status(r.status).json(r.body)
     })
   })
 })
 
 app.get('/room/:roomName/chat_history', function(req, res, next) {
-  var key = [req.params.roomName, 'chat'].join(':')
-  redis.lrange(key, -100, -1, function(err, chats) {
+  req.room.getChats(function(err, data) {
     if (err) return next(err)
-    chats = chats.map(JSON.parse)
-    res.json(chats)
+    res.json(data)
   })
 })
 
 app.get('/room/:roomName/queue', function(req, res, next) {
-  var key = [req.params.roomName, 'queue'].join(':')
-  redis.lrange(key, -100, -1, function(err, data) {
+  req.room.getQueue(function(err, data) {
     if (err) return next(err)
-    data = data.map(JSON.parse)
     res.json(data)
   })
 })
 
 app.post('/room/:roomName/chat', function(req, res, next) {
-  var ev = {
-    _event: 'chat',
-    message: req.body.message,
-    user: req.session.user,
-    time: new Date(),
-  }
-  req.chan.emit('ev', ev)
-  var key = [req.params.roomName, ev._event].join(':')
-  redis.rpush(key, JSON.stringify(ev))
+  req.room.chatBy(req.session.user, req.body.message)
   res.send('ok')
 })
 
 app.post('/room/:roomName/skip', function(req, res, next) {
-  // increment skip count
-  // if skip count is high enough - emit skip
-  var ev = {
-    _event: 'skip',
-    user: req.session.user,
-    time: new Date(),
-  }
-  var key = [req.params.roomName, 'queue'].join(':')
-  redis.lpop(key, function(err, play) {
-    console.log('le play', play)
-  })
-  req.chan.emit('ev', ev)
-  res.send('ok')
-})
-
-app.post('/room/:roomName/play', function(req, res, next) {
-  var ev = {
-    _event: 'play',
-    body: req.body,
-    user: req.session.user,
-    time: new Date(),
-  }
-  req.chan.emit('ev', ev)
+  req.room.skipBy(req.session.user)
   res.send('ok')
 })
 
 app.post('/room/:roomName/queue', function(req, res, next) {
-  var ev = {
-    _event: 'queue',
-    track: req.body.track,
-    user: req.session.user,
-    time: new Date(),
-  }
-  req.chan.emit('ev', ev)
-  var key = [req.params.roomName, ev._event].join(':')
-  redis.rpush(key, JSON.stringify(ev))
+  // XXX: should just be a track id get track from soundcloud
+  var track = req.body.track
+  req.room.enqueueBy(req.session.user, track)
   res.send('ok')
 })
 
+
+
+
 app.get('/room/:roomName/events', sse, function(req, res, next) {
-  var onEv = function(ev) {
+  var onBroadcast = function(ev) {
     res.json(ev)
   }
-  req.chan.on('ev', onEv)
+  req.room.on('broadcast', onBroadcast)
   req.on('close', function() {
-    req.chan.removeListener('ev', onEv)
+    req.room.removeListener('ev', onBroadcast)
   })
 })
 

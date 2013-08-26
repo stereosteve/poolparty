@@ -12,15 +12,15 @@ PP.factory('eventSource', function($rootScope) {
     }
     console.log(data);
 
-    if (data._event === 'chat') {
+    if (data.type === 'chat') {
       console.log('got de chat', data)
       $rootScope.chats.push(data)
       $rootScope.$apply()
     }
-    else if (data._event === 'queue') {
+    else if (data.type === 'enqueue') {
       $rootScope.queue.push(data)
     }
-    else if (data._event === 'skip') {
+    else if (data.type === 'skip') {
       var play = $rootScope.queue.shift()
       var track = play.track
       $('.loadHead,.playHead').css('width', 0)
