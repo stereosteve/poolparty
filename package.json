@@ -1,9 +1,10 @@
 {
-  "name": "application-name",
+  "name": "poolparty",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node server.js",
+    "start": "naught start server",
+    "stop": "naught stop",
     "test": "mocha"
   },
   "dependencies": {
@@ -13,7 +14,8 @@
     "authom": "~0.4.17",
     "connect-redis": "~1.4.5",
     "redis": "~0.8.4",
-    "superagent": "~0.15.4"
+    "superagent": "~0.15.4",
+    "naught": "~0.6.0"
   },
   "devDependencies": {
     "mocha": "~1.12.0"

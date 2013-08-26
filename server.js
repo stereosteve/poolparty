@@ -189,9 +189,15 @@ app.get('/room/:roomName/events', sse, function(req, res, next) {
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('port: ' + app.get('port'));
+  if (process.send) process.send('online');
 });
 
-
+process.on('message', function(message) {
+  if (message === 'shutdown') {
+    if (process.send) process.send('offline')
+    process.exit(0);
+  }
+});
 
 
 
