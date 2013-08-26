@@ -1,6 +1,7 @@
 process.env.SOUNDCLOUD_ID = 'a363a0f2b20a24d72e93f9d02b703830'
 process.env.SOUNDCLOUD_SECRET = 'ffae43c75407be36492038ce5429a00e'
 process.env.COOKIE_SECRET = 'yoe8iqysbijf85x'
+process.env.REDIS_DB = '9'
 
 /**
  * Module dependencies.
@@ -18,14 +19,14 @@ var express = require('express')
 var app = express();
 var redis = Redis.createClient();
 
-redis.select(9)
+redis.select(process.env.REDIS_DB)
 redis.on("error", function (err) {
     console.error("redis error", err);
 });
 
 var RedisStore = require('connect-redis')(express);
 var sessionStore = new RedisStore({
-  db: 9
+  db: process.env.REDIS_DB
 });
 
 // all environments

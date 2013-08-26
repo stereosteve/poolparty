@@ -13,11 +13,17 @@ var track = require('./fixture/track')
 var user = require('./fixture/user')
 
 describe('room', function() {
-  it.skip('emits trackEnded event', function(done) {
+
+  it('key()', function() {
+    var k = room.key('user', 12345)
+    assert.equal(k, 'testroom:user:12345')
+  })
+
+  it('emits trackEnded event', function(done) {
     room.play(track)
     assert.equal(track.duration, 200)
     assert.equal(room.trackEnd, room.trackStart + track.duration)
-    room.on('trackEnded', function(track) {
+    room.once('trackEnded', function(track) {
       done()
     })
   })
