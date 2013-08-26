@@ -1,3 +1,11 @@
+process.env.REDIS_DB = '7'
+var Redis = require('redis')
+var redis = Redis.createClient()
+before(function(done) {
+  redis.select(process.env.REDIS_DB)
+  redis.flushdb(done)
+})
+
 var assert = require('assert')
 var Room = require('../lib/room')
 var room = new Room('testroom')
@@ -14,7 +22,7 @@ describe('room', function() {
     })
   })
 
-  describe('queue', function() {
+  describe('enqueueBy', function() {
     before(function(done) {
       room.enqueueBy(user, track, done)
     })
@@ -32,10 +40,35 @@ describe('room', function() {
     })
     it('next', function(done) {
       room.next()
-      room.on('queueEmpty', function() {
+      room.once('queueEmpty', function() {
         console.log('le queue is empty')
         done()
       })
     })
   })
+
+  describe('visitBy', function() {
+    it('broadcasts userJoined the first time', function(done) {
+      room.once('userJoined', function(u) {
+        assert.equal(u.id, user.id)
+        done()
+      })
+      room.visitBy(user)
+    })
+    it('does not broadcast userJoined the second time', function(done) {
+      room.once('userJoined', function(u) {
+        throw("should not broadcast visitBy a second time")
+      })
+      room.visitBy(user, function() {
+        setTimeout(done, 500)
+      })
+    })
+    it('has one user', function(done) {
+      room.getUserIds(function(err, ids) {
+        assert.equal(ids.length, 1)
+        done(err)
+      })
+    })
+  })
+
 })
