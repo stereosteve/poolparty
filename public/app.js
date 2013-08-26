@@ -20,7 +20,8 @@ PP.factory('eventSource', function($rootScope) {
     else if (data.type === 'enqueue') {
       $rootScope.queue.push(data)
     }
-    else if (data.type === 'skip') {
+    else if (data.type === 'play') {
+      // Should we assume a play is the next track on the queue?
       var play = $rootScope.queue.shift()
       var track = play.track
       $('.loadHead,.playHead').css('width', 0)
