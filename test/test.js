@@ -71,4 +71,21 @@ describe('room', function() {
     })
   })
 
+  describe('chatBy', function() {
+    it('emits a chat event', function(done) {
+      room.once('broadcast', function(ev) {
+        assert.equal(ev.type, 'chat')
+        assert.equal(ev.message, 'First Chat')
+        done()
+      })
+      room.chatBy(user, 'First Chat')
+    })
+    it('has an item in the chat history', function(done) {
+      room.getChats(function(err, data) {
+        assert.equal(data.length, 1)
+        done(err)
+      })
+    })
+  })
+
 })
