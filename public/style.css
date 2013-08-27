@@ -43,6 +43,19 @@ img {
 .media .img {float:left; margin-right: 10px;}
 .media .img img{display:block;}
 
+table {
+  border-collapse: collapse;
+}
+th, td {
+  padding: 5px;
+}
+th {
+  text-align: left;
+  border-bottom: 1px solid #555;
+}
+td {
+  border-bottom: 1px solid #ddd;
+}
 
 #menu {
   position: fixed;
@@ -142,6 +155,7 @@ img {
   padding: 10px;
   z-index: 2;
   background: rgba(0,0,0,0.8);
+  color: #ccc;
 }
 
 .loadHead, .playHead {

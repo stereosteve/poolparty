@@ -6,6 +6,23 @@ function serverDate() {
   return Date.now() - clockSkew
 }
 
+function formatMs(ms) {
+  if (!ms) return '0:00';
+  var hours, minutes, seconds;
+  hours = Math.floor(ms / (60 * 60 * 1000));
+  minutes = Math.floor((ms / 60000) % 60);
+  seconds = Math.floor((ms / 1000) % 60);
+  if (hours && minutes < 10) {
+    minutes = "0" + minutes;
+  }
+  if (seconds < 10) {
+    seconds = "0" + seconds;
+  }
+  var arr = [minutes, seconds]
+  if (hours) arr.unshift(hours)
+  return arr.join(':');
+}
+
 
 PP.factory('eventSource', function($rootScope) {
   var source = new EventSource(BASE + '/events');
@@ -106,6 +123,11 @@ PP.directive('ppUserTile', function() {
   }
 })
 
+PP.filter('ms', function() {
+  return formatMs
+})
+
+
 PP.config(function($routeProvider, $locationProvider) {
   // $locationProvider.html5Mode(true)
 
@@ -167,6 +189,7 @@ PP.run(function(eventSource, $rootScope, $http) {
       whileplaying: function() {
         var percentPlayed = this.position / this.durationEstimate * 100
         $('.playHead').css('width', percentPlayed + '%')
+        $('.currentPos').text(formatMs(this.position))
       },
       onload: function() {
         this.setPosition(serverDate() - nowPlaying.startAt)
@@ -184,7 +207,7 @@ PP.run(function(eventSource, $rootScope, $http) {
   })
 
   function loadNext() {
-    var PRELOAD_LIMIT = 5
+    var PRELOAD_LIMIT = 3
     var q = $rootScope.queue, next
     for (var i = 0; i < q.length && i < PRELOAD_LIMIT && !next; i++) {
       if (!q[i].sound) next = q[i]

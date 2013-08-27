@@ -5,7 +5,19 @@
     <div class="playHead"></div>
     <div class="info">
       <div>
-        <a ng-href="{{nowPlaying.track.permalink_url}}" target="_blank">{{nowPlaying.track.title}}</a>
+        <div class="flr">
+          <span class="currentPos"></span>
+          /
+          <span>{{nowPlaying.track.duration | ms}}</span>
+        </div>
+        <b><a
+          ng-href="{{nowPlaying.track.user.username}}"
+          target="_blank"
+          ng-bind="nowPlaying.track.user.username"></a></b>
+        <a
+          ng-href="{{nowPlaying.track.permalink_url}}"
+          target="_blank"
+          ng-bind="nowPlaying.track.title"></a>
       </div>
     </div>
   </div>
@@ -18,7 +30,19 @@
     <button ng-click="skip()">skip</button>
   </div>
 
-  <div ng-repeat="item in queue">
-    {{item.track.title}}
-  </div>
+  <table>
+    <tr>
+      <th>Song</th>
+      <th>Artist</th>
+      <th>Duration</th>
+      <th>Added by</th>
+    </tr>
+    <tr ng-repeat="item in queue">
+      <td>{{item.track.title}}</td>
+      <td>{{item.track.user.username}}</td>
+      <td>{{item.track.duration | ms}}</td>
+      <td>{{item.user.username}}</td>
+    </tr>
+  </table>
+
 </div>
