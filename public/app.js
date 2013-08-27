@@ -32,8 +32,7 @@ PP.factory('eventSource', function($rootScope) {
     }
     else if (data.type === 'nowPlaying') {
       // Should we assume a play is the next track on the queue?
-      $rootScope.queue.shift()
-      $rootScope.nowPlaying = data
+      $rootScope.nowPlaying = $rootScope.queue.shift()
     }
 
     console.log(data);
@@ -153,29 +152,58 @@ PP.run(function(eventSource, $rootScope, $http) {
   })
 
 
-  $rootScope.$watch('nowPlaying', function(play) {
-    if (!play) return
-    var track = play.track
+  $rootScope.$watch('nowPlaying', function(nowPlaying) {
+    if (!nowPlaying) return
     $('.loadHead,.playHead').css('width', 0)
-    SC.stream(track.stream_url, {
+    var opts = {
       ontimedcomments: function(comments){
         console.log(comments);
       },
-      whileplaying: function() {
+      whileloading: function() {
         var percentLoaded = this.bytesLoaded / this.bytesTotal * 100
-        var percentPlayed = this.position / this.durationEstimate * 100
+        console.log('painful loading', percentLoaded)
         $('.loadHead').css('width', percentLoaded + '%')
+      },
+      whileplaying: function() {
+        var percentPlayed = this.position / this.durationEstimate * 100
         $('.playHead').css('width', percentPlayed + '%')
       },
       onload: function() {
-        this.setPosition(serverDate() - play.startAt)
+        this.setPosition(serverDate() - nowPlaying.startAt)
+        loadNext()
       }
-    }, function(sound) {
+    }
+    createSound(nowPlaying, function() {
       soundManager.stopAll()
-      sound.play()
-    });
+      nowPlaying.sound.play(opts)
+    })
   })
 
+  function loadNext() {
+    var PRELOAD_LIMIT = 5
+    var q = $rootScope.queue, next
+    for (var i = 0; i < q.length && i < PRELOAD_LIMIT && !next; i++) {
+      if (!q[i].sound) next = q[i]
+    }
+    if (!next) return
+    var opts = {
+      onload: function() {
+        console.log('onload', next)
+        loadNext()
+      }
+    }
+    createSound(next, function() {
+      next.sound.load(opts)
+    })
+  }
+
+  function createSound(play, cb) {
+    if (play.sound) return cb()
+    SC.stream(play.track.stream_url, function(sound) {
+      play.sound = sound
+      cb()
+    });
+  }
 
 
 })
