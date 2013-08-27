@@ -1,6 +1,11 @@
 var PP = angular.module('party', ['ngRoute'])
 var BASE = window.location.pathname
 
+var clockSkew = 0;
+function serverDate() {
+  return Date.now() - clockSkew
+}
+
 
 PP.factory('eventSource', function($rootScope) {
   var source = new EventSource(BASE + '/events');
@@ -10,9 +15,16 @@ PP.factory('eventSource', function($rootScope) {
     } catch(err) {
       console.error("invalid event json", e.data, err)
     }
-    console.log(data);
 
-    if (data.type === 'chat') {
+    if (data.type === 'tick') {
+      var skew = Date.now() - data.now
+      if (skew < clockSkew) {
+        clockSkew = skew
+        console.log('clockSkew', clockSkew)
+      }
+      return
+    }
+    else if (data.type === 'chat') {
       $rootScope.chats.push(data)
     }
     else if (data.type === 'enqueue') {
@@ -24,6 +36,7 @@ PP.factory('eventSource', function($rootScope) {
       $rootScope.nowPlaying = data
     }
 
+    console.log(data);
     $rootScope.$apply()
 
   }, false);
@@ -153,6 +166,9 @@ PP.run(function(eventSource, $rootScope, $http) {
         var percentPlayed = this.position / this.durationEstimate * 100
         $('.loadHead').css('width', percentLoaded + '%')
         $('.playHead').css('width', percentPlayed + '%')
+      },
+      onload: function() {
+        this.setPosition(serverDate() - play.startAt)
       }
     }, function(sound) {
       soundManager.stopAll()
