@@ -176,6 +176,10 @@ PP.run(function(eventSource, $rootScope, $http) {
     createSound(nowPlaying, function() {
       soundManager.stopAll()
       nowPlaying.sound.play(opts)
+      if (nowPlaying.sound.loaded) {
+        $('.loadHead').css('width', '100%')
+        loadNext()
+      }
     })
   })
 
