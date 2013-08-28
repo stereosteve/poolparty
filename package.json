@@ -15,7 +15,8 @@
     "connect-redis": "~1.4.5",
     "redis": "~0.8.4",
     "superagent": "~0.15.4",
-    "naught": "~0.6.0"
+    "naught": "~0.6.0",
+    "stylus": "~0.37.0"
   },
   "devDependencies": {
     "mocha": "~1.12.0"

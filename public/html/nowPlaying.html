@@ -1,0 +1,15 @@
+<div id="nowPlaying">
+  <div class="flr">
+    <span class="currentPos"></span>
+    /
+    <span>{{nowPlaying.track.duration | ms}}</span>
+  </div>
+  <b><a
+    ng-href="{{nowPlaying.track.user.permalink_url}}"
+    target="_blank"
+    ng-bind="nowPlaying.track.user.username"></a></b>
+  <a
+    ng-href="{{nowPlaying.track.permalink_url}}"
+    target="_blank"
+    ng-bind="nowPlaying.track.title"></a>
+</div>

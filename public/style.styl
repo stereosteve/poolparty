@@ -8,45 +8,45 @@ body {
   margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-a {
-  color: #ffa500;
+
+h2 {
 }
+
+a {
+  color: orange;
+}
+
 img {
   max-width: 100%;
 }
+
 .flr {
   float: right;
 }
+
 .clickable {
   cursor: pointer;
 }
+
 .pad {
   padding: 20px;
 }
+
 .clear {
   clear: both;
 }
+
 .media {
   margin-bottom: 10px;
 }
-.media,
-.bd {
-  overflow: hidden;
-  _overflow: visible;
-  zoom: 1;
-}
-.media .img {
-  float: left;
-  margin-right: 10px;
-}
-.media .img img {
-  display: block;
-}
+.media, .bd {overflow:hidden; _overflow:visible; zoom:1;}
+.media .img {float:left; margin-right: 10px;}
+.media .img img{display:block;}
+
 table {
   border-collapse: collapse;
 }
-th,
-td {
+th, td {
   padding: 5px;
 }
 th {
@@ -56,27 +56,34 @@ th {
 td {
   border-bottom: 1px solid #ddd;
 }
-#nowPlaying {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50px;
-  background: #333;
-  color: #fff;
-  line-height: 50px;
-  padding: 0 10px;
-}
+
+
+$chromeTop = 50px
+
+#nowPlaying
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  height: $chromeTop
+
+  background: #333
+  color: white
+  line-height: $chromeTop
+  padding: 0 10px
+
+
 #menu {
   position: fixed;
-  top: 50px;
+  top: $chromeTop;
   bottom: 0;
   left: 0;
   width: 75px;
   padding: 10px;
-  background: #fff;
+  background: white;
   border-right: 1px solid #ccc;
 }
+
 #menu a {
   text-decoration: none;
   display: block;
@@ -84,13 +91,21 @@ td {
   text-align: center;
   line-height: 50px;
 }
+
+
 #main {
-  margin-top: 50px;
+  margin-top: $chromeTop;
   margin-left: 75px;
 }
+
+
+
+
+
+
 #chat .chats {
   position: fixed;
-  top: 50px;
+  top: $chromeTop;
   bottom: 40px;
   left: 275px;
   right: 0;
@@ -115,31 +130,41 @@ td {
   width: 100%;
   padding: 5px;
 }
+
 .roster {
   background: #f7f7f7;
   border-right: 1px solid #ccc;
   padding: 10px;
   position: fixed;
-  top: 50px;
+  top: $chromeTop;
   left: 75px;
   bottom: 0;
   width: 200px;
 }
+
 .roster .img {
   width: 30px;
   height: 30px;
 }
+
+
+
+
+
+
 #player {
   width: 100%;
   height: 100px;
   position: relative;
 }
+
 #player .waveform {
   width: 100%;
   height: 100%;
   position: absolute;
   z-index: 1;
 }
+
 #player .info {
   position: absolute;
   bottom: 0;
@@ -149,24 +174,29 @@ td {
   background: rgba(0,0,0,0.8);
   color: #ccc;
 }
-.loadHead,
-.playHead {
+
+.loadHead, .playHead {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
 }
+
 .loadHead {
   background: #2d2d2d;
 }
 .playHead {
-  background: #ffa500;
+  background: orange;
 }
+
+
+
 .userInfo {
-  background: #f5f5f5;
+  background: whitesmoke;
   padding: 10px;
   border-bottom: 1px solid #ccc;
 }
+
 .userTile {
   width: 100px;
   height: 120px;
@@ -175,6 +205,9 @@ td {
   margin: 10px;
   border: 1px solid #ccc;
 }
+
+
+
 .track {
   margin: 10px 0;
   background: #ddd;
