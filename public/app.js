@@ -23,6 +23,10 @@ function formatMs(ms) {
   return arr.join(':');
 }
 
+//
+// Services
+// ========
+//
 
 PP.factory('eventSource', function($rootScope) {
   var source = new EventSource(BASE + '/events');
@@ -76,6 +80,11 @@ PP.factory('sc', function($rootScope, $q) {
   return sc;
 })
 
+//
+// Controllers
+// ===========
+//
+
 PP.controller('root', function($scope, sc, $location, $http) {
   $scope.playTrack = function(track) {
     $http.post(BASE + '/queue', {track: track})
@@ -111,15 +120,21 @@ PP.controller('userCtrl', function($scope, user, sc) {
   })
 })
 
+
+//
+// Directives
+// ==========
+//
+
 PP.directive('ppTrack', function() {
   return {
-    templateUrl: '/html/track.html',
+    templateUrl: '/html/ppTrack.html',
   }
 })
 
 PP.directive('ppUserTile', function() {
   return {
-    templateUrl: '/html/userTile.html',
+    templateUrl: '/html/ppUserTile.html',
   }
 })
 
@@ -127,6 +142,11 @@ PP.filter('ms', function() {
   return formatMs
 })
 
+
+//
+// Routes
+// ======
+//
 
 PP.config(function($routeProvider, $locationProvider) {
   // $locationProvider.html5Mode(true)
@@ -141,14 +161,20 @@ PP.config(function($routeProvider, $locationProvider) {
     },
     controller: 'userCtrl'
   })
-  .when('/player', {
-    templateUrl: '/html/player.html',
+  .when('/queue', {
+    templateUrl: '/html/queue.html',
   })
   .when('/', {
     templateUrl: '/html/chat.html',
   })
 
 })
+
+
+//
+// Run
+// ===
+//
 
 PP.run(function(eventSource, $rootScope, $http) {
   $rootScope.chats = []
