@@ -20,9 +20,10 @@ img {
   max-width: 100%;
 }
 
-.flr {
-  float: right;
-}
+.fll
+  float: left
+.flr
+  float: right
 
 .clickable {
   cursor: pointer;
@@ -42,6 +43,17 @@ img {
 .media, .bd {overflow:hidden; _overflow:visible; zoom:1;}
 .media .img {float:left; margin-right: 10px;}
 .media .img img{display:block;}
+
+
+.cf:before,
+.cf:after {
+    content: " ";
+    display: table;
+}
+.cf:after {
+    clear: both;
+}
+
 
 table {
   border-collapse: collapse;
@@ -206,17 +218,25 @@ $chromeTop = 50px
   border: 1px solid #ccc;
 }
 
+.bigh3 h3
+  background: darkred
+  color: white
+  padding: 10px
+  margin: 20px 0 10px 0
 
 
-.track {
-  margin: 10px 0;
-  background: #ddd;
-}
-.track .wave {
-  background: #333;
-  height: 70px;
-}
-.track .wave img {
-  width: 100%;
-  height: 100%;
-}
+
+.ppTrack
+  margin-bottom: 20px;
+
+  .info
+    line-height: 1.5
+
+  .wave
+    margin-left: 200px
+    background: #333;
+    height: 100px;
+
+  .wave img
+    width: 100%;
+    height: 100%;

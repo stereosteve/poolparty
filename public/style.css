@@ -14,6 +14,9 @@ a {
 img {
   max-width: 100%;
 }
+.fll {
+  float: left;
+}
 .flr {
   float: right;
 }
@@ -41,6 +44,14 @@ img {
 }
 .media .img img {
   display: block;
+}
+.cf:before,
+.cf:after {
+  content: " ";
+  display: table;
+}
+.cf:after {
+  clear: both;
 }
 table {
   border-collapse: collapse;
@@ -175,15 +186,24 @@ td {
   margin: 10px;
   border: 1px solid #ccc;
 }
-.track {
-  margin: 10px 0;
-  background: #ddd;
+.bigh3 h3 {
+  background: #8b0000;
+  color: #fff;
+  padding: 10px;
+  margin: 20px 0 10px 0;
 }
-.track .wave {
+.ppTrack {
+  margin-bottom: 20px;
+}
+.ppTrack .info {
+  line-height: 1.5;
+}
+.ppTrack .wave {
+  margin-left: 200px;
   background: #333;
-  height: 70px;
+  height: 100px;
 }
-.track .wave img {
+.ppTrack .wave img {
   width: 100%;
   height: 100%;
 }

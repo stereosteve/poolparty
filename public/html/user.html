@@ -5,17 +5,23 @@
       <img ng-src="{{user.avatar_url}}">
     </div>
     <div class="bd">
-      <h2>{{user.full_name}}</h2>
+      <h2>
+        <a href="{{user.permalink_url}}" target="_blank">{{user.full_name}}</a>
+      </h2>
     </div>
   </div>
 
 
-  <div class="pad">
+  <div class="pad bigh3">
     <h3>Tracks</h3>
-    <div ng-repeat="track in tracks" ng-click="playTrack(track)" pp-track></div>
+    <div ng-repeat="track in tracks"
+         ng-click="playTrack(track)"
+         pp-track></div>
 
     <h3>Favorites</h3>
-    <div ng-repeat="track in favorites" ng-click="playTrack(track)" pp-track></div>
+    <div ng-repeat="track in favorites"
+         ng-click="playTrack(track)"
+         pp-track></div>
 
     <h3>Followers</h3>
     <div ng-repeat="user in followers" ng-click="showUser(user)" pp-user-tile></div>
