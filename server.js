@@ -117,8 +117,8 @@ app.all('/room/:roomName', updatePresence)
 app.all('/room/:roomName*', updatePresence)
 
 function updatePresence(req, res, next) {
-  next()
   req.room.visitBy(req.session.user)
+  next()
 }
 
 app.get('/room/:roomName', function(req, res, next) {
@@ -128,14 +128,8 @@ app.get('/room/:roomName', function(req, res, next) {
   })
 });
 
-app.get('/room/:roomName/roster', function(req, res, next) {
-  req.room.getUserIds(function(err, userIds) {
-    if (err) return next(err)
-    scGet('/users', {ids: userIds.join(',')}, function(err, r) {
-      if (err) return next(err)
-      res.status(r.status).json(r.body)
-    })
-  })
+app.get('/room/:roomName/member_map', function(req, res, next) {
+  res.json(req.room.memberMap)
 })
 
 app.get('/room/:roomName/chat_history', function(req, res, next) {
@@ -173,6 +167,10 @@ app.post('/room/:roomName/queue', function(req, res, next) {
   // XXX: should just be a track id get track from soundcloud
   var track = req.body.track
   req.room.enqueueBy(req.session.user, track)
+  res.send('ok')
+})
+
+app.post('/room/:roomName/still_here', function(req, res, next) {
   res.send('ok')
 })
 

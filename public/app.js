@@ -45,6 +45,13 @@ PP.factory('eventSource', function($rootScope) {
       }
       return
     }
+    else if (data.type === 'memberJoined') {
+      $rootScope.memberMap[data.id] = data.member
+    }
+    else if (data.type === 'memberLeft') {
+      $rootScope.memberMap[data.id] = undefined
+      delete $rootScope.memberMap[data.id]
+    }
     else if (data.type === 'chat') {
       $rootScope.chats.push(data)
     }
@@ -178,10 +185,11 @@ PP.config(function($routeProvider, $locationProvider) {
 
 PP.run(function(eventSource, $rootScope, $http) {
   $rootScope.chats = []
+  $rootScope.memberMap = {}
   $rootScope.currentUser = USER
   console.log('party time')
-  $http.get(BASE + '/roster').success(function(roster) {
-    $rootScope.roster = roster
+  $http.get(BASE + '/member_map').success(function(data) {
+    $rootScope.memberMap = data
   })
   $http.get(BASE + '/chat_history').success(function(chats) {
     $rootScope.chats = chats
@@ -198,6 +206,11 @@ PP.run(function(eventSource, $rootScope, $http) {
   SC.whenStreamingReady(function() {
     console.log('streaming ready!')
   })
+
+  setInterval(stillHere, 2000)
+  function stillHere() {
+    $.post(BASE + '/still_here')
+  }
 
 
   $rootScope.$watch('nowPlaying', function(nowPlaying) {
