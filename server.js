@@ -1,13 +1,14 @@
-if (process.env.NODE_ENV === 'production') {
-  process.env.SOUNDCLOUD_ID = '1353155f6bb27128358d013cb12e4932'
-  process.env.SOUNDCLOUD_SECRET = '1e85455e2b0add423327f75c6137d3ca'
-  process.env.PORT = 80
-} else {
-  process.env.SOUNDCLOUD_ID = 'a363a0f2b20a24d72e93f9d02b703830'
-  process.env.SOUNDCLOUD_SECRET = 'ffae43c75407be36492038ce5429a00e'
-}
-process.env.COOKIE_SECRET = 'yoe8iqysbijf85x'
-process.env.REDIS_DB = '9'
+require('./config')
+var assert = require('assert')
+;[
+  'SOUNDCLOUD_ID',
+  'SOUNDCLOUD_SECRET',
+  'REDIS_DB',
+  'COOKIE_SECRET',
+  'PORT',
+].forEach(function(k) {
+  assert.ok(process.env[k], 'process.env.' + k + ' is not set')
+})
 
 /**
  * Module dependencies.
@@ -30,7 +31,7 @@ var sessionStore = new RedisStore({
 });
 
 // all environments
-app.set('port', process.env.PORT || 9000);
+app.set('port', process.env.PORT);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());

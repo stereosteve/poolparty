@@ -1,0 +1,5 @@
+process.env.SOUNDCLOUD_ID = 'aaa'
+process.env.SOUNDCLOUD_SECRET = 'bbb'
+process.env.COOKIE_SECRET = 'ccc'
+process.env.REDIS_DB = '9'
+process.env.PORT = '9000'
