@@ -109,6 +109,7 @@ app.get('/whoami', loginRequired, function(req, res, next) {
 app.all('/room*', loginRequired)
 
 app.all('/room/:roomName*', function(req, res, next) {
+  if (req.params.roomName !== 'main') return res.render('closed')
   req.room = getRoom(req.params.roomName)
   next()
 })

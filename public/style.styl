@@ -1,3 +1,5 @@
+$primary = deeppink
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -9,11 +11,33 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-h2 {
-}
+#hero
+  background: $primary
+  text-align: center
+  padding: 50px
+  color: white
+  margin: 50px 0
+  border-top: 1px solid #333
+  border-bottom: 1px solid #333
+
+  h1
+    color: white
+    padding: 10px
+    border: 5px solid white
+    width: 300px
+    margin: 0 auto
+
+  p
+    margin: 50px auto
+    font-style: italic
+
+.content
+  max-width: 800px
+  margin: 0 auto
+
 
 a {
-  color: orange;
+  color: $primary;
 }
 
 img {
@@ -53,6 +77,25 @@ img {
 .cf:after {
     clear: both;
 }
+
+body.alert
+  background: whitesmoke
+
+  .box
+    max-width: 600px
+    margin: 50px auto
+    background: white
+    border: 1px solid #ccc
+    box-shadow: 0 0 1px #aaa
+
+    .header
+      padding: 10px 20px
+      background: #f7f7f7
+
+    .body
+      padding: 20px
+    p
+      line-height: 1.5
 
 
 table {
@@ -198,7 +241,7 @@ $chromeTop = 50px
   background: #2d2d2d;
 }
 .playHead {
-  background: orange;
+  background: $primary;
 }
 
 

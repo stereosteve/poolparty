@@ -8,8 +8,32 @@ body {
   margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
+#hero {
+  background: #ff1493;
+  text-align: center;
+  padding: 50px;
+  color: #fff;
+  margin: 50px 0;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+}
+#hero h1 {
+  color: #fff;
+  padding: 10px;
+  border: 5px solid #fff;
+  width: 300px;
+  margin: 0 auto;
+}
+#hero p {
+  margin: 50px auto;
+  font-style: italic;
+}
+.content {
+  max-width: 800px;
+  margin: 0 auto;
+}
 a {
-  color: #ffa500;
+  color: #ff1493;
 }
 img {
   max-width: 100%;
@@ -52,6 +76,26 @@ img {
 }
 .cf:after {
   clear: both;
+}
+body.alert {
+  background: #f5f5f5;
+}
+body.alert .box {
+  max-width: 600px;
+  margin: 50px auto;
+  background: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 1px #aaa;
+}
+body.alert .box .header {
+  padding: 10px 20px;
+  background: #f7f7f7;
+}
+body.alert .box .body {
+  padding: 20px;
+}
+body.alert .box p {
+  line-height: 1.5;
 }
 table {
   border-collapse: collapse;
@@ -171,7 +215,7 @@ td {
   background: #2d2d2d;
 }
 .playHead {
-  background: #ffa500;
+  background: #ff1493;
 }
 .userInfo {
   background: #f5f5f5;
