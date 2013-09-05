@@ -20,7 +20,6 @@ var express = require('express')
   , sse = require('connect-sse')()
   , EventEmitter = require('events').EventEmitter
   , authom = require('authom')
-  , superagent = require('superagent')
   , Room = require('./lib/room')
 
 var app = express();
@@ -78,7 +77,6 @@ var getRoom = function(name) {
 // middleware
 
 function loginRequired(req, res, next) {
-  console.log('loginRequired', req.path)
   if (req.session.user) return next()
   req.session.afterLogin = req.url
   res.redirect('/auth/soundcloud')
@@ -208,13 +206,3 @@ process.on('message', function(message) {
 });
 
 
-
-
-
-
-function scGet(path, query, cb) {
-  var url = 'https://api.soundcloud.com' + path + '.json';
-  query.client_id = process.env.SOUNDCLOUD_ID;
-  var req = superagent.get(url).query(query);
-  if (cb) req.end(cb);
-}

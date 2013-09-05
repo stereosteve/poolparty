@@ -187,7 +187,7 @@ PP.run(function(eventSource, $rootScope, $http) {
   $rootScope.chats = []
   $rootScope.memberMap = {}
   $rootScope.currentUser = USER
-  console.log('party time')
+
   $http.get(BASE + '/member_map').success(function(data) {
     $rootScope.memberMap = data
   })
@@ -199,7 +199,6 @@ PP.run(function(eventSource, $rootScope, $http) {
   })
   $http.get(BASE + '/now_playing').success(function(data) {
     // $rootScope.queue = data
-    console.log('nowPlaying', data)
     $rootScope.nowPlaying = data
   })
 
@@ -207,7 +206,7 @@ PP.run(function(eventSource, $rootScope, $http) {
     console.log('streaming ready!')
   })
 
-  setInterval(stillHere, 2000)
+  setInterval(stillHere, 5000)
   function stillHere() {
     $.post(BASE + '/still_here')
   }
@@ -222,7 +221,6 @@ PP.run(function(eventSource, $rootScope, $http) {
       },
       whileloading: function() {
         var percentLoaded = this.bytesLoaded / this.bytesTotal * 100
-        console.log('painful loading', percentLoaded)
         $('.loadHead').css('width', percentLoaded + '%')
       },
       whileplaying: function() {
@@ -231,7 +229,8 @@ PP.run(function(eventSource, $rootScope, $http) {
         $('.currentPos').text(formatMs(this.position))
       },
       onload: function() {
-        this.setPosition(serverDate() - nowPlaying.startAt)
+        var pos = serverDate() - nowPlaying.startAt
+        if (!isNaN(pos)) this.setPosition(pos)
         loadNext()
       }
     }
