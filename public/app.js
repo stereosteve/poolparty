@@ -69,16 +69,31 @@ PP.factory('eventSource', function($rootScope) {
   }, false);
 })
 
-PP.factory('sc', function($rootScope, $q) {
+PP.factory('sc', function($rootScope, $q, $cacheFactory) {
   var sc = {}
 
+  var cache = $cacheFactory('soundcloudCache');
+  var makeCacheKey = function(path, params) {
+    params = params || {}
+    var key = path
+    Object.keys(params).sort().forEach(function(p) {
+      key = [key, p, params[p]].join(',')
+    })
+    return key
+  }
+
   sc.get = function(path, params) {
+    var cacheKey = makeCacheKey(path, params)
+    var cached = cache.get(cacheKey)
+    if (cached) return $q.when(cached)
     var deferred = $q.defer()
     SC.get(path, params, function(data, error) {
-      if (error)
+      if (error) {
         deferred.reject(error)
-      else
+      } else {
+        cache.put(cacheKey, data)
         deferred.resolve(data)
+      }
       $rootScope.$apply()
     })
     return deferred.promise
