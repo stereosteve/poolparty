@@ -61,12 +61,15 @@ img {
   clear: both;
 }
 
-.media {
-  margin-bottom: 10px;
-}
-.media, .bd {overflow:hidden; _overflow:visible; zoom:1;}
-.media .img {float:left; margin-right: 10px;}
-.media .img img{display:block;}
+
+.media, .bd
+  overflow:hidden;
+  zoom:1;
+.media .img
+  float:left;
+  margin-right: 10px;
+.media .img img
+  display:block;
 
 
 .cf:before,
@@ -112,6 +115,17 @@ td {
   border-bottom: 1px solid #ddd;
 }
 
+
+.tabRow
+  li
+    display: inline-block
+    padding: 10px
+    background: whitesmoke
+    margin: 5px 2px
+    cursor: pointer
+
+.tabBody
+  padding: 20px
 
 $chromeTop = 50px
 
@@ -212,7 +226,7 @@ $chromeTop = 50px
   width: 300px;
   height: 100px;
   z-index: 100
-  background: green
+  border: 1px solid #ccc
 
 
 .ppPlayer

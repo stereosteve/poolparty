@@ -53,13 +53,9 @@ img {
 .clear {
   clear: both;
 }
-.media {
-  margin-bottom: 10px;
-}
 .media,
 .bd {
   overflow: hidden;
-  _overflow: visible;
   zoom: 1;
 }
 .media .img {
@@ -110,6 +106,16 @@ th {
 }
 td {
   border-bottom: 1px solid #ddd;
+}
+.tabRow li {
+  display: inline-block;
+  padding: 10px;
+  background: #f5f5f5;
+  margin: 5px 2px;
+  cursor: pointer;
+}
+.tabBody {
+  padding: 20px;
 }
 #nowPlaying {
   position: fixed;
@@ -193,7 +199,7 @@ td {
   width: 300px;
   height: 100px;
   z-index: 100;
-  background: #008000;
+  border: 1px solid #ccc;
 }
 .ppPlayer {
   width: 100%;

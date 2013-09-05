@@ -128,6 +128,7 @@ PP.controller('chatCtrl', function($scope, $http) {
 
 PP.controller('userCtrl', function($scope, user, sc) {
   $scope.user = user
+  $scope.tab = 'tracks'
   sc.get('/users/' + user.id + '/followers').then(function(data) {
     $scope.followers = data
   })
