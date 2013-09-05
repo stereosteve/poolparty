@@ -20,9 +20,10 @@ describe('room', function() {
   })
 
   it('emits trackEnded event', function(done) {
-    room.play(track)
+    room.play({
+      track: track
+    })
     assert.equal(track.duration, 200)
-    assert.equal(room.trackEnd, room.trackStart + track.duration)
     room.once('trackEnded', function(track) {
       done()
     })
@@ -47,7 +48,6 @@ describe('room', function() {
     it('next', function(done) {
       room.next()
       room.once('queueEmpty', function() {
-        console.log('le queue is empty')
         done()
       })
     })
@@ -55,25 +55,17 @@ describe('room', function() {
 
   describe('visitBy', function() {
     it('broadcasts userJoined the first time', function(done) {
-      room.once('userJoined', function(u) {
-        assert.equal(u.id, user.id)
+      room.once('broadcast', function(ev) {
+        assert.equal(ev.type, 'memberJoined')
+        assert.equal(ev.member.user.id, user.id)
         done()
       })
       room.visitBy(user)
     })
-    it('does not broadcast userJoined the second time', function(done) {
-      room.once('userJoined', function(u) {
-        throw("should not broadcast visitBy a second time")
-      })
-      room.visitBy(user, function() {
-        setTimeout(done, 500)
-      })
-    })
     it('has one user', function(done) {
-      room.getUserIds(function(err, ids) {
-        assert.equal(ids.length, 1)
-        done(err)
-      })
+      var memberCount = Object.keys(room.memberMap).length
+      assert.equal(memberCount, 1)
+      done()
     })
   })
 
