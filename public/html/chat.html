@@ -1,15 +1,6 @@
 <div id="chat" ng-controller="chatCtrl">
-  <!-- roster -->
-  <div class="roster">
-    <div ng-repeat="(id, member) in memberMap" class="media clickable" ng-click="showUser(user)">
-      <div class="img">
-        <img ng-src="{{member.user.avatar_url}}">
-      </div>
-      <div class="bd">
-        {{member.user.username}}
-      </div>
-    </div>
-  </div>
+
+  <div class="rosterContainer" pp-roster></div>
 
   <!-- chats -->
   <div class="chats">

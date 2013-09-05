@@ -1,0 +1,22 @@
+<div class="ppPlayer">
+  <img class="waveform" ng-src="{{nowPlaying.track.waveform_url}}">
+  <div class="loadHead"></div>
+  <div class="playHead"></div>
+  <div class="info">
+    <div>
+      <div class="flr">
+        <span class="currentPos"></span>
+        /
+        <span>{{nowPlaying.track.duration | ms}}</span>
+      </div>
+      <b><a
+        ng-href="{{nowPlaying.track.user.username}}"
+        target="_blank"
+        ng-bind="nowPlaying.track.user.username"></a></b>
+      <a
+        ng-href="{{nowPlaying.track.permalink_url}}"
+        target="_blank"
+        ng-bind="nowPlaying.track.title"></a>
+    </div>
+  </div>
+</div>

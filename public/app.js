@@ -148,9 +148,21 @@ PP.controller('userCtrl', function($scope, user, sc) {
 // ==========
 //
 
+PP.directive('ppPlayer', function() {
+  return {
+    templateUrl: '/html/ppPlayer.html',
+  }
+})
+
 PP.directive('ppTrack', function() {
   return {
     templateUrl: '/html/ppTrack.html',
+  }
+})
+
+PP.directive('ppRoster', function() {
+  return {
+    templateUrl: '/html/ppRoster.html',
   }
 })
 

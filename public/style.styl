@@ -186,63 +186,67 @@ $chromeTop = 50px
   padding: 5px;
 }
 
-.roster {
-  background: #f7f7f7;
-  border-right: 1px solid #ccc;
-  padding: 10px;
+.rosterContainer
   position: fixed;
   top: $chromeTop;
   left: 75px;
   bottom: 0;
   width: 200px;
-}
 
-.roster .img {
+  background: #f7f7f7;
+  border-right: 1px solid #ccc;
+
+.roster
+  padding: 10px;
+
+.roster .img
   width: 30px;
   height: 30px;
-}
 
 
 
+.playerContainer
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 300px;
+  height: 100px;
+  z-index: 100
+  background: green
 
 
-
-#player {
+.ppPlayer
   width: 100%;
   height: 100px;
   position: relative;
-}
 
-#player .waveform {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: 1;
-}
+  .waveform
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
 
-#player .info {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 10px;
-  z-index: 2;
-  background: rgba(0,0,0,0.8);
-  color: #ccc;
-}
+  .info
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    z-index: 2;
+    background: rgba(0,0,0,0.8);
+    color: #ccc;
 
-.loadHead, .playHead {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-}
+  .loadHead, .playHead
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
 
-.loadHead {
-  background: #2d2d2d;
-}
-.playHead {
-  background: $primary;
-}
+  .loadHead
+    background: #2d2d2d;
+
+  .playHead
+    background: $primary;
+
 
 
 
