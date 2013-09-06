@@ -28,7 +28,7 @@ function formatMs(ms) {
 // ========
 //
 
-PP.factory('eventSource', function($rootScope) {
+PP.factory('eventSource', function($rootScope, $timeout) {
   var source = new EventSource(BASE + '/events');
   source.addEventListener('message', function(e) {
     var data
@@ -54,7 +54,8 @@ PP.factory('eventSource', function($rootScope) {
       delete $rootScope.memberMap[data.id]
     }
     else if (data.type === 'chat') {
-      $rootScope.chats.push(data)
+      $rootScope.chats.push(data);
+      if (chatIsScrolledToBottom()) $timeout(chatScrollBottom);
     }
     else if (data.type === 'enqueue') {
       $rootScope.queue.push(data)
@@ -68,6 +69,7 @@ PP.factory('eventSource', function($rootScope) {
     $rootScope.$apply()
 
   }, false);
+
 })
 
 PP.factory('sc', function($rootScope, $q, $cacheFactory) {
@@ -218,7 +220,7 @@ PP.config(function($routeProvider, $locationProvider) {
 // ===
 //
 
-PP.run(function(eventSource, $rootScope, $http) {
+PP.run(function(eventSource, $rootScope, $http, $timeout) {
   $rootScope.chats = []
   $rootScope.memberMap = {}
   $rootScope.currentUser = window.USER
@@ -228,6 +230,7 @@ PP.run(function(eventSource, $rootScope, $http) {
   })
   $http.get(BASE + '/chat_history').success(function(chats) {
     $rootScope.chats = chats
+    $timeout(chatScrollBottom);
   })
   $http.get(BASE + '/queue').success(function(data) {
     $rootScope.queue = data
@@ -305,5 +308,15 @@ PP.run(function(eventSource, $rootScope, $http) {
     });
   }
 
-
 })
+
+function chatScrollBottom() {
+  var chatContainer = document.getElementById('chat-container');
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+function chatIsScrolledToBottom() {
+  var elem = document.getElementById('chat-container');
+  // http://stackoverflow.com/questions/876115/how-can-i-determine-if-a-div-is-scrolled-to-the-bottom
+  return Math.abs(elem.scrollTop + elem.offsetHeight - elem.scrollHeight) < 5;
+}
