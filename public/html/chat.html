@@ -1,10 +1,16 @@
-<div class="chatContainer" ng-controller="chatCtrl">
-
-  <!-- chats -->
-  <div class="chats">
-    <div class="chat" ng-repeat="chat in chats">
-      <b>{{chat.user.username}}:</b> {{chat.message}}
-    </div>
+<div ng-controller="chatCtrl">
+  <div id="chat-container" class="chatContainer">
+    <!-- chats -->
+    <table class="chats">
+      <tr class="chat" ng-repeat="chat in chats">
+        <td class="name">
+          {{chat.user.username}}
+        </td>
+        <td>
+          {{chat.message}}
+        </td>
+      </tr>
+    </table>
   </div>
 
   <!-- say bar -->
