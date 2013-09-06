@@ -55,16 +55,26 @@ PP.factory('eventSource', function($rootScope, $timeout) {
       delete $rootScope.memberMap[data.id]
     }
     else if (data.type === 'chat') {
-      $rootScope.chats.push(data);
-      if ($rootScope.chats.length > MAX_CHATS_LEN) $rootScope.chats.shift();
-      if (chatIsScrolledToBottom()) $timeout(chatScrollBottom);
+      addChatItem()
     }
     else if (data.type === 'enqueue') {
       $rootScope.queue.push(data)
     }
     else if (data.type === 'nowPlaying') {
       // Should we assume a play is the next track on the queue?
+      // currently necessary because the "preloader" attaches songs
+      // to the queue items... so doing
+      //  $rootScope.nowPlaying = data
+      // would lose the preloaded `sound`
+      // Might want to redo preloading implementation, see #13
       $rootScope.nowPlaying = $rootScope.queue.shift()
+      addChatItem()
+    }
+
+    function addChatItem() {
+      $rootScope.chats.push(data);
+      if ($rootScope.chats.length > MAX_CHATS_LEN) $rootScope.chats.shift();
+      if (chatIsScrolledToBottom()) $timeout(chatScrollBottom);
     }
 
     console.log(data);
