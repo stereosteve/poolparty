@@ -1,5 +1,14 @@
 <div>
 
+  <div class="currentQueueItem queueItem media">
+    <div class="img">
+      <img ng-src="{{nowPlaying.track.artwork_url || nowPlaying.track.user.avatar_url}}">
+    </div>
+    <div class="bd">
+      {{nowPlaying.track.title}}
+    </div>
+  </div>
+
   <div class="queueItem media" ng-repeat="item in queue">
     <div class="img">
       <img ng-src="{{item.track.artwork_url || item.track.user.avatar_url}}">
