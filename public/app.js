@@ -122,6 +122,15 @@ PP.controller('root', function($scope, sc, $location, $http) {
   $scope.skip = function() {
     $http.post(BASE + '/skip')
   }
+
+  $scope.$root.mute = function() {
+    $scope.$root.isMuted = true
+    $scope.nowPlaying.sound.mute()
+  }
+  $scope.$root.unmute = function() {
+    $scope.$root.isMuted = false
+    $scope.nowPlaying.sound.unmute()
+  }
 })
 
 PP.controller('chatCtrl', function($scope, $http, $timeout) {
@@ -278,6 +287,7 @@ PP.run(function(eventSource, $rootScope, $http, $timeout) {
     createSound(nowPlaying, function() {
       soundManager.stopAll()
       nowPlaying.sound.play(opts)
+      if ($rootScope.isMuted) nowPlaying.sound.mute()
       if (nowPlaying.sound.loaded) {
         $('.loadHead').css('width', '100%')
         loadNext()
