@@ -30,6 +30,7 @@ function formatMs(ms) {
 
 PP.factory('eventSource', function($rootScope, $timeout) {
   var source = new EventSource(BASE + '/events');
+  var MAX_CHATS_LEN = 100;
   source.addEventListener('message', function(e) {
     var data
     try {
@@ -55,6 +56,7 @@ PP.factory('eventSource', function($rootScope, $timeout) {
     }
     else if (data.type === 'chat') {
       $rootScope.chats.push(data);
+      if ($rootScope.chats.length > MAX_CHATS_LEN) $rootScope.chats.shift();
       if (chatIsScrolledToBottom()) $timeout(chatScrollBottom);
     }
     else if (data.type === 'enqueue') {
