@@ -16,7 +16,8 @@
     "redis": "~0.8.4",
     "superagent": "~0.15.4",
     "naught": "~0.6.0",
-    "stylus": "~0.37.0"
+    "stylus": "~0.37.0",
+    "pend": "~1.1.0"
   },
   "devDependencies": {
     "mocha": "~1.12.0"

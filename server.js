@@ -164,9 +164,8 @@ app.post('/room/:roomName/skip', function(req, res, next) {
 })
 
 app.post('/room/:roomName/queue', function(req, res, next) {
-  // XXX: should just be a track id get track from soundcloud
-  var track = req.body.track
-  req.room.enqueueBy(req.session.user, track)
+  var trackId = req.body.trackId;
+  req.room.enqueueIdBy(req.session.user, trackId)
   res.send('ok')
 })
 

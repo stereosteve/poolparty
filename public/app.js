@@ -114,7 +114,7 @@ PP.factory('sc', function($rootScope, $q, $cacheFactory) {
 
 PP.controller('root', function($scope, sc, $location, $http) {
   $scope.playTrack = function(track) {
-    $http.post(BASE + '/queue', {track: track})
+    $http.post(BASE + '/queue', {trackId: track.id})
   }
   $scope.showUser = function(user) {
     $location.path('/users/' + user.id)
