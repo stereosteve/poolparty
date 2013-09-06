@@ -126,10 +126,12 @@ PP.controller('root', function($scope, sc, $location, $http) {
   $scope.$root.mute = function() {
     $scope.$root.isMuted = true
     $scope.nowPlaying.sound.mute()
+    localStorage.setItem('isMuted', true)
   }
   $scope.$root.unmute = function() {
     $scope.$root.isMuted = false
     $scope.nowPlaying.sound.unmute()
+    localStorage.removeItem('isMuted')
   }
 })
 
@@ -236,6 +238,7 @@ PP.run(function(eventSource, $rootScope, $http, $timeout) {
   $rootScope.chats = []
   $rootScope.memberMap = {}
   $rootScope.currentUser = window.USER
+  $rootScope.isMuted = !!localStorage.getItem('isMuted')
 
   $http.get(BASE + '/member_map').success(function(data) {
     $rootScope.memberMap = data
