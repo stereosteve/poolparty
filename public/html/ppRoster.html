@@ -1,5 +1,6 @@
 <div class="roster">
-  <div ng-repeat="(id, member) in memberMap" class="media clickable" ng-click="showUser(user)">
+  <div ng-repeat="(id, member) in memberMap" class="media clickable"
+       ng-click="showUser(member.user)">
     <div class="img">
       <img ng-src="{{member.user.avatar_url}}">
     </div>

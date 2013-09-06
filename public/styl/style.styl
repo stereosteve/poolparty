@@ -1,0 +1,245 @@
+$primary = deeppink
+$topbarHeight = 50px
+$sidebarWidth = 200px
+$playerHeight = 100px
+$chatFormHeight = 40px
+
+@import homepage
+
+*
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+body
+  padding: 0;
+  margin: 0;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+
+.content
+  max-width: 800px
+  margin: 0 auto
+
+a
+  color: $primary;
+
+img
+  max-width: 100%;
+
+
+.fll
+  float: left
+.flr
+  float: right
+
+.clickable
+  cursor: pointer;
+
+
+.pad
+  padding: 20px;
+
+
+.clear
+  clear: both;
+
+
+.media, .bd
+  overflow:hidden;
+  zoom:1;
+.media .img
+  float:left;
+  margin-right: 10px;
+.media .img img
+  display:block;
+
+
+.cf:before,
+.cf:after
+    content: " ";
+    display: table;
+
+.cf:after
+    clear: both;
+
+
+
+
+
+
+.topbar
+  background: #222
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  height: $topbarHeight
+  color: whitesmoke
+
+.mainContainer,
+.chatContainer
+  position: fixed;
+  top: $topbarHeight;
+  bottom: $playerHeight + $chatFormHeight;
+  left: $sidebarWidth;
+  right: $sidebarWidth;
+  overflow-y: auto;
+
+.rosterContainer
+  position: fixed;
+  top: $topbarHeight;
+  left: 0;
+  bottom: $playerHeight;
+  width: $sidebarWidth;
+  background: #f7f7f7;
+  border-right: 1px solid #ccc;
+
+
+.queueContainer
+  position: fixed;
+  top: $topbarHeight;
+  right: 0;
+  bottom: $playerHeight;
+  width: $sidebarWidth;
+  background: #f7f7f7;
+  border-left: 1px solid #ccc;
+
+
+.playerContainer
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  height: $playerHeight;
+  z-index: 100
+  background: whitesmoke
+  border-top: 1px solid #ccc
+
+
+// chat
+// ====
+
+.chat
+  padding: 4px;
+  border-bottom: 1px solid #f7f7f7;
+
+.chatForm
+  position: fixed;
+  bottom: $playerHeight;
+  left: $sidebarWidth;
+  right: 0;
+  height: $chatFormHeight;
+  background: #f7f7f7;
+  border-top: 1px solid #ccc;
+  padding: 5px;
+
+  .input
+    border: 1px solid #ccc;
+    width: 100%;
+    padding: 5px;
+
+
+// roster
+// ======
+
+.roster
+  padding: 10px;
+
+.roster .img
+  width: 30px;
+  height: 30px;
+
+
+// Queue
+// =====
+
+.queueItem
+  padding: 5px
+  margin: 5px 0
+  border-bottom: 1px solid #ccc
+
+  .img img
+    width: 30px
+
+
+// Player
+// ======
+
+
+.ppPlayer
+  width: 100%;
+  height: 100px;
+  position: relative;
+
+  .waveform
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+
+  .info
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    z-index: 2;
+    background: rgba(0,0,0,0.8);
+    color: #ccc;
+
+  .loadHead, .playHead
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+
+  .loadHead
+    background: #2d2d2d;
+
+  .playHead
+    background: $primary;
+
+
+
+// User Page
+// =========
+
+.userInfo
+  background: whitesmoke;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+
+
+.userTile
+  width: 100px;
+  height: 120px;
+  overflow: hidden;
+  float: left;
+  margin: 10px;
+  border: 1px solid #ccc;
+
+.tabRow
+  li
+    display: inline-block
+    padding: 10px
+    background: whitesmoke
+    margin: 5px 2px
+    cursor: pointer
+
+.tabBody
+  padding: 20px
+
+
+.ppTrack
+  margin-bottom: 20px;
+
+  .info
+    line-height: 1.5
+
+  .wave
+    margin-left: 200px
+    background: #333;
+    height: 100px;
+
+  .wave img
+    width: 100%;
+    height: 100%;

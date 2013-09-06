@@ -167,6 +167,12 @@ PP.directive('ppRoster', function() {
   }
 })
 
+PP.directive('ppQueue', function() {
+  return {
+    templateUrl: '/html/ppQueue.html',
+  }
+})
+
 PP.directive('ppUserTile', function() {
   return {
     templateUrl: '/html/ppUserTile.html',

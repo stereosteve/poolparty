@@ -2,20 +2,16 @@
 <html>
   <head>
     <title>party</title>
-    <link rel='stylesheet' href='/style.css' />
-    <link rel='stylesheet' href='/font-awesome/css/font-awesome.min.css' />
+    <link rel='stylesheet' href='/styl/style.css' />
   </head>
   <body ng-app="party" ng-controller="root" ng-cloak>
 
-    <div ng-include="'/html/nowPlaying.html'"></div>
-    <div ng-include="'/html/menu.html'"></div>
 
-    <!-- main -->
-    <div id="main" ng-view></div>
-
-    <div class="playerContainer">
-      <div pp-player></div>
-    </div>
+    <div ng-include="'/html/topbar.html'"></div>
+    <div class="rosterContainer" pp-roster></div>
+    <div class="queueContainer" pp-queue></div>
+    <div ng-view></div>
+    <div class="playerContainer" pp-player></div>
 
 
 
