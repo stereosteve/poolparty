@@ -190,6 +190,38 @@ PP.directive('ppQueue', function() {
   }
 })
 
+PP.directive('ppChatRow', function() {
+  return function($scope, $el) {
+
+    var render = {}
+
+    render.chat = function() {
+      $el
+      .append(
+        $('<td>').addClass('name').text($scope.item.user.username)
+      )
+      .append(
+        $('<td>').text($scope.item.message)
+      )
+    }
+
+    render.nowPlaying = function() {
+      $el
+      .addClass('nowPlaying')
+      .append(
+        $('<td>').addClass('name').text('Now Playing')
+      )
+      .append(
+        $('<td>').text($scope.item.track.title)
+      )
+    }
+
+    var fn = render[$scope.item.type]
+    if (fn) fn()
+  }
+
+})
+
 PP.directive('ppUserTile', function() {
   return {
     templateUrl: '/html/ppUserTile.html',

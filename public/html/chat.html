@@ -2,14 +2,7 @@
   <div id="chat-container" class="chatContainer">
     <!-- chats -->
     <table class="chats">
-      <tr class="chat" ng-repeat="chat in chats">
-        <td class="name">
-          {{chat.user.username}}
-        </td>
-        <td>
-          {{chat.message}}
-        </td>
-      </tr>
+      <tr class="chat" pp-chat-row ng-repeat="item in chats"></tr>
     </table>
   </div>
 

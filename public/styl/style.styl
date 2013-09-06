@@ -120,17 +120,26 @@ img
 // ====
 
 .chats
+  border-collapse: collapse
   width: 100%;
+  td
+    vertical-align: top
   .name
     width: 1%;
     white-space: nowrap;
     font-weight: bold;
     text-align: right;
 
-.chat
-  td
-    padding: 4px;
-    border-bottom: 1px solid #f7f7f7;
+  .chat
+    td
+      padding: 6px;
+      border-bottom: 1px solid #f7f7f7;
+
+  .nowPlaying
+    background: #222
+    color: gold
+    td
+      border-bottom: 1px solid black;
 
 .chatForm
   position: fixed;
