@@ -2,7 +2,7 @@
 
   <div class="queueItem media" ng-repeat="item in queue">
     <div class="img">
-      <img ng-src="{{item.track.artwork_url}}">
+      <img ng-src="{{item.track.artwork_url || item.track.user.avatar_url}}">
     </div>
     <div class="bd">
       {{item.track.title}}

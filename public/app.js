@@ -124,7 +124,8 @@ PP.controller('root', function($scope, sc, $location, $http) {
   }
 })
 
-PP.controller('chatCtrl', function($scope, $http) {
+PP.controller('chatCtrl', function($scope, $http, $timeout) {
+  $timeout(chatScrollBottom);
   $scope.say = function() {
     $http.post(BASE + '/chat', {message: $scope.chat})
     $scope.chat = undefined
