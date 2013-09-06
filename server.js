@@ -70,7 +70,7 @@ var rooms = {}
 
 var getRoom = function(name) {
   rooms[name] = rooms[name] || new Room(name)
-  return rooms[name] || makeChannel(name)
+  return rooms[name]
 }
 
 

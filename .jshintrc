@@ -1,23 +1,11 @@
 {
-    // Settings
     "passfail"      : false,  // Stop on first error.
     "maxerr"        : 100,    // Maximum errors before stopping.
-
-
-    // Predefined globals whom JSHint will ignore.
     "browser"       : true,   // Standard browser globals e.g. `window`, `document`.
-
     "node"          : true,
-    "rhino"         : false,
-    "couch"         : false,
-    "wsh"           : false,   // Windows Scripting Host.
+    "jquery"        : true,
 
-    "jquery"        : false,
-    "prototypejs"   : false,
-    "mootools"      : false,
-    "dojo"          : false,
-
-
+    "predef": ["angular", "EventSource", "SC", "soundManager"],
 
     // Development.
     "debug"         : true,   // Allow debugger statements e.g. browser breakpoints.
@@ -28,6 +16,8 @@
     "es5"           : true,   // Allow EcmaScript 5 syntax.
     "strict"        : false,  // Require `use strict` pragma in every file.
     "globalstrict"  : true,   // Allow global "use strict" (also enables 'strict').
+
+    "proto": true,
 
 
     // The Good Parts.

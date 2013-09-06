@@ -31,8 +31,9 @@ function formatMs(ms) {
 PP.factory('eventSource', function($rootScope) {
   var source = new EventSource(BASE + '/events');
   source.addEventListener('message', function(e) {
+    var data
     try {
-      var data = JSON.parse(e.data)
+      data = JSON.parse(e.data)
     } catch(err) {
       console.error("invalid event json", e.data, err)
     }
@@ -49,7 +50,7 @@ PP.factory('eventSource', function($rootScope) {
       $rootScope.memberMap[data.id] = data.member
     }
     else if (data.type === 'memberLeft') {
-      $rootScope.memberMap[data.id] = undefined
+      $rootScope.memberMap[data.id] = undefined;
       delete $rootScope.memberMap[data.id]
     }
     else if (data.type === 'chat') {
@@ -220,7 +221,7 @@ PP.config(function($routeProvider, $locationProvider) {
 PP.run(function(eventSource, $rootScope, $http) {
   $rootScope.chats = []
   $rootScope.memberMap = {}
-  $rootScope.currentUser = USER
+  $rootScope.currentUser = window.USER
 
   $http.get(BASE + '/member_map').success(function(data) {
     $rootScope.memberMap = data
