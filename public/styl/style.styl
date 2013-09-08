@@ -80,10 +80,13 @@ img
 .chatContainer
   position: fixed;
   top: $topbarHeight;
-  bottom: $playerHeight + $chatFormHeight;
+  bottom: $playerHeight;
   left: $sidebarWidth;
   right: $sidebarWidth;
   overflow-y: auto;
+
+.chatContainer
+  bottom: $playerHeight + $chatFormHeight;
 
 .rosterContainer
   position: fixed;
@@ -160,8 +163,10 @@ img
 // roster
 // ======
 
-.roster
-  padding: 10px;
+
+.rosterItem
+  padding: 5px;
+  border-bottom: 1px solid #ccc
 
 .roster .img
   width: 30px;
