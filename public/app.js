@@ -370,11 +370,12 @@ PP.run(function(eventSource, $rootScope, $http, $timeout) {
 
 function chatScrollBottom() {
   var chatContainer = document.getElementById('chat-container');
-  chatContainer.scrollTop = chatContainer.scrollHeight;
+  if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
 function chatIsScrolledToBottom() {
   var elem = document.getElementById('chat-container');
+  if (!elem) return
   // http://stackoverflow.com/questions/876115/how-can-i-determine-if-a-div-is-scrolled-to-the-bottom
   return Math.abs(elem.scrollTop + elem.offsetHeight - elem.scrollHeight) < 5;
 }
