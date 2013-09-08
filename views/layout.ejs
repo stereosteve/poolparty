@@ -23,8 +23,8 @@
 
     <script>
       SC.initialize({
-        client_id: 'a363a0f2b20a24d72e93f9d02b703830',
-        redirect_uri: 'http://localhost:9000/'
+        client_id: '<%- SOUNDCLOUD_ID %>',
+        redirect_uri: window.location.origin,
       });
       SC.accessToken('<%- token %>');
       window.USER = <%- JSON.stringify(user) %>;

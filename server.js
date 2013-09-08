@@ -61,6 +61,10 @@ authom.on("auth", function(req, res, data) {
 })
 authom.on("error", function(req, res, data) {
   console.error("authom error", data);
+  res.render('authom_error.ejs', {
+    error: data.error,
+    error_description: data.error_description,
+  })
 })
 
 
@@ -123,6 +127,7 @@ function updatePresence(req, res, next) {
 
 app.get('/room/:roomName', function(req, res, next) {
   res.render('layout', {
+    SOUNDCLOUD_ID: process.env.SOUNDCLOUD_ID,
     token: req.session.token,
     user: req.session.user,
   })
