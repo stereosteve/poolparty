@@ -97,6 +97,10 @@ PP.factory('sc', function($rootScope, $q, $cacheFactory) {
     return key
   }
 
+  sc.clearCache = function() {
+    cache.removeAll()
+  }
+
   sc.get = function(path, params) {
     var cacheKey = makeCacheKey(path, params)
     var cached = cache.get(cacheKey)
@@ -122,12 +126,16 @@ PP.factory('sc', function($rootScope, $q, $cacheFactory) {
 // ===========
 //
 
-PP.controller('root', function($scope, sc, $location, $http) {
+PP.controller('rootCtrl', function($scope, sc, $location, $http, $route) {
   $scope.playTrack = function(track) {
     $http.post(BASE + '/queue', {trackId: track.id})
   }
   $scope.showUser = function(user) {
     $location.path('/users/' + user.id)
+  }
+  $scope.scRefresh = function() {
+    sc.clearCache()
+    $route.reload()
   }
   $scope.skip = function() {
     $http.post(BASE + '/skip')
@@ -153,20 +161,16 @@ PP.controller('chatCtrl', function($scope, $http, $timeout) {
   }
 })
 
-PP.controller('userCtrl', function($scope, user, sc) {
+PP.controller('userCtrl', function($scope, user, sc, $routeParams, $location) {
   $scope.user = user
-  $scope.tab = 'tracks'
-  sc.get('/users/' + user.id + '/followers').then(function(data) {
-    $scope.followers = data
-  })
-  sc.get('/users/' + user.id + '/followings').then(function(data) {
-    $scope.followings = data
-  })
-  sc.get('/users/' + user.id + '/tracks').then(function(data) {
-    $scope.tracks = data
-  })
-  sc.get('/users/' + user.id + '/favorites').then(function(data) {
-    $scope.favorites = data
+  $scope.tab = $routeParams.tabName || 'tracks'
+  $scope.showTab = function(tabName) {
+    var newPath = ['users', user.id, tabName].join('/')
+    $location.path(newPath)
+  }
+  var path = ['/users', user.id, $routeParams.tabName].join('/')
+  sc.get(path).then(function(data) {
+    $scope[$routeParams.tabName] = data
   })
 })
 
@@ -253,6 +257,11 @@ PP.config(function($routeProvider, $locationProvider) {
 
   $routeProvider
   .when('/users/:user_id', {
+    redirectTo: function($routeParams) {
+      return ['users', $routeParams.user_id, 'tracks'].join('/')
+    }
+  })
+  .when('/users/:user_id/:tabName', {
     templateUrl: '/html/user.html',
     resolve: {
       user: function(sc, $route) {

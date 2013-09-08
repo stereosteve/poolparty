@@ -12,10 +12,11 @@
   </div>
 
   <ul class="tabRow">
-    <li ng-click="tab = 'tracks'">Tracks</li>
-    <li ng-click="tab = 'favorites'">Favorites</li>
-    <li ng-click="tab = 'followings'">Following</li>
-    <li ng-click="tab = 'followers'">Followers</li>
+    <li class="flr" ng-click="scRefresh()">refresh</li>
+    <li ng-click="showTab('tracks')">Tracks</li>
+    <li ng-click="showTab('favorites')">Favorites</li>
+    <li ng-click="showTab('followings')">Following</li>
+    <li ng-click="showTab('followers')">Followers</li>
   </ul>
 
   <div class="tabBody" ng-show="tab == 'tracks'">
