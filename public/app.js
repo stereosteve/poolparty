@@ -84,6 +84,7 @@ PP.factory('eventSource', function($rootScope, $timeout) {
 
 })
 
+// soundcloud wrapper
 PP.factory('sc', function($rootScope, $q, $cacheFactory) {
   var sc = {}
 
@@ -116,6 +117,29 @@ PP.factory('sc', function($rootScope, $q, $cacheFactory) {
       $rootScope.$apply()
     })
     return deferred.promise
+  }
+
+  sc.put = function(path, params) {
+    var deferred = $q.defer()
+    SC.put(path, params, makeResolver(deferred))
+    return deferred.promise
+  }
+
+  sc.delete = function(path) {
+    var deferred = $q.defer()
+    SC.delete(path, makeResolver(deferred))
+    return deferred.promise
+  }
+
+  function makeResolver(deferred) {
+    return function(data, error) {
+      if (error) {
+        deferred.reject(error)
+      } else {
+        deferred.resolve(data)
+      }
+      $rootScope.$apply()
+    }
   }
 
   return sc;
@@ -180,9 +204,42 @@ PP.controller('userCtrl', function($scope, user, sc, $routeParams, $location) {
 // ==========
 //
 
-PP.directive('ppPlayer', function() {
+PP.directive('ppPlayer', function(sc) {
   return {
     templateUrl: '/html/ppPlayer.html',
+    link: link,
+  }
+  function link($scope) {
+    $scope.like = function() {
+      sc.put(likeUrl()).then(
+        function(ok) {
+          sc.clearCache()
+          $scope.$root.isLiked = true
+        },
+        function(err) {
+          console.error('like failed', err)
+        }
+      )
+    }
+    $scope.unlike = function() {
+      sc.delete(likeUrl()).then(
+        function(ok) {
+          sc.clearCache()
+          $scope.$root.isLiked = false
+        },
+        function(err) {
+          console.error('unlike failed', err)
+        }
+      )
+    }
+    function likeUrl() {
+      return [
+        '/users',
+        $scope.currentUser.id,
+        'favorites',
+        $scope.nowPlaying.track.id,
+      ].join('/')
+    }
   }
 })
 
@@ -285,7 +342,7 @@ PP.config(function($routeProvider, $locationProvider) {
 // ===
 //
 
-PP.run(function(eventSource, $rootScope, $http, $timeout) {
+PP.run(function(eventSource, $rootScope, $http, $timeout, sc) {
   $rootScope.chats = []
   $rootScope.memberMap = {}
   $rootScope.currentUser = window.USER
@@ -346,6 +403,10 @@ PP.run(function(eventSource, $rootScope, $http, $timeout) {
         $('.loadHead').css('width', '100%')
         loadNext()
       }
+    })
+    $rootScope.isLiked = undefined;
+    sc.get(nowPlaying.track.uri).then(function(track) {
+      $rootScope.isLiked = track.user_favorite
     })
   })
 

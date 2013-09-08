@@ -3,6 +3,9 @@
   <div class="topRight">
     <button ng-click="mute()" ng-hide="isMuted">mute</button>
     <button ng-click="unmute()" ng-show="isMuted">unmute</button>
+
+    <button ng-click="like()" ng-show="isLiked == false">like</button>
+    <button ng-click="unlike()" ng-show="isLiked == true">unlike</button>
   </div>
 
   <img class="waveform" ng-src="{{nowPlaying.track.waveform_url}}">
