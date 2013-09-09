@@ -347,6 +347,7 @@ PP.run(function(eventSource, $rootScope, $http, $timeout, sc) {
   $rootScope.memberMap = {}
   $rootScope.currentUser = window.USER
   $rootScope.isMuted = !!localStorage.getItem('isMuted')
+  $rootScope.soundcloudId = window.SOUNDCLOUD_ID
 
   $http.get(BASE + '/member_map').success(function(data) {
     $rootScope.memberMap = data

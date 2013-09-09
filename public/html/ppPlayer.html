@@ -6,6 +6,10 @@
 
     <button ng-click="like()" ng-show="isLiked == false">like</button>
     <button ng-click="unlike()" ng-show="isLiked == true">unlike</button>
+
+    <a target="_blank"
+      ng-href="{{nowPlaying.track.download_url}}?client_id={{soundcloudId}}"
+      ng-show="nowPlaying.track.download_url">download</a>
   </div>
 
   <img class="waveform" ng-src="{{nowPlaying.track.waveform_url}}">

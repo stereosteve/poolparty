@@ -27,6 +27,7 @@
         redirect_uri: window.location.origin,
       });
       SC.accessToken('<%- token %>');
+      window.SOUNDCLOUD_ID = '<%- SOUNDCLOUD_ID %>';
       window.USER = <%- JSON.stringify(user) %>;
     </script>
 
