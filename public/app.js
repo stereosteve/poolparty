@@ -136,6 +136,7 @@ PP.factory('sc', function($rootScope, $q, $cacheFactory) {
       if (error) {
         deferred.reject(error)
       } else {
+        sc.clearCache()
         deferred.resolve(data)
       }
       $rootScope.$apply()
@@ -196,6 +197,35 @@ PP.controller('userCtrl', function($scope, user, sc, $routeParams, $location) {
   sc.get(path).then(function(data) {
     $scope[$routeParams.tabName] = data
   })
+
+  var followingsPath = '/me/followings/' + user.id
+  // The SC followings endpoint is weird.
+  // It returns a 404 if you are not following.
+  // If you are following it sends a 303, which jQuery follows but without
+  // a token, so you eventually get a 401.
+  // So a 404 means not following, and anything else means following.
+  //
+  sc.get(followingsPath).then(function() {}, function(err) {
+    if (err.message.indexOf('404') > -1) {
+      // not following
+      $scope.isFollowing = false
+      console.log('not following')
+    } else {
+      // following
+      $scope.isFollowing = true
+      console.log('following')
+    }
+  })
+  $scope.follow = function() {
+    sc.put(followingsPath).then(function() {
+      $scope.isFollowing = true
+    })
+  }
+  $scope.unfollow = function() {
+    sc.delete(followingsPath).then(function() {
+      $scope.isFollowing = false
+    })
+  }
 })
 
 
@@ -213,7 +243,6 @@ PP.directive('ppPlayer', function(sc) {
     $scope.like = function() {
       sc.put(likeUrl()).then(
         function(ok) {
-          sc.clearCache()
           $scope.$root.isLiked = true
         },
         function(err) {
@@ -224,7 +253,6 @@ PP.directive('ppPlayer', function(sc) {
     $scope.unlike = function() {
       sc.delete(likeUrl()).then(
         function(ok) {
-          sc.clearCache()
           $scope.$root.isLiked = false
         },
         function(err) {
