@@ -305,12 +305,13 @@ PP.directive('ppChatRow', function() {
     var render = {}
 
     render.chat = function() {
+      var message = replaceURLWithHTMLLinks($scope.item.message)
       $el
       .append(
         $('<td>').addClass('name').text($scope.item.user.username)
       )
       .append(
-        $('<td>').text($scope.item.message)
+        $('<td>').html(message)
       )
     }
 
@@ -487,4 +488,10 @@ function chatIsScrolledToBottom() {
   if (!elem) return
   // http://stackoverflow.com/questions/876115/how-can-i-determine-if-a-div-is-scrolled-to-the-bottom
   return Math.abs(elem.scrollTop + elem.offsetHeight - elem.scrollHeight) < 5;
+}
+
+// http://stackoverflow.com/questions/37684/how-to-replace-plain-urls-with-links
+function replaceURLWithHTMLLinks(text) {
+  var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+  return text.replace(exp,"<a href='$1' target='_blank'>$1</a>");
 }
