@@ -194,9 +194,17 @@ PP.controller('userCtrl', function($scope, user, sc, $routeParams, $location) {
     $location.path(newPath)
   }
   var path = ['/users', user.id, $routeParams.tabName].join('/')
-  sc.get(path).then(function(data) {
-    $scope[$routeParams.tabName] = data
-  })
+  var data = $scope[$routeParams.tabName] = []
+
+  function fetchPage() {
+    sc.get(path, {offset: data.length}).then(function(page) {
+      page.forEach(function(datum) {
+        data.push(datum)
+      })
+      if (page.length > 0) fetchPage()
+    })
+  }
+  fetchPage()
 
   var followingsPath = '/me/followings/' + user.id
   // The SC followings endpoint is weird.

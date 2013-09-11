@@ -21,10 +21,10 @@
 
   <ul class="tabRow">
     <li class="flr" ng-click="scRefresh()">refresh</li>
-    <li ng-click="showTab('tracks')">Tracks</li>
-    <li ng-click="showTab('favorites')">Favorites</li>
-    <li ng-click="showTab('followings')">Following</li>
-    <li ng-click="showTab('followers')">Followers</li>
+    <li ng-click="showTab('tracks')"><b>{{user.track_count}}</b> Tracks</li>
+    <li ng-click="showTab('favorites')"><b>{{user.public_favorites_count}}</b> Favorites</li>
+    <li ng-click="showTab('followings')"><b>{{user.followings_count}}</b> Following</li>
+    <li ng-click="showTab('followers')"><b>{{user.followers_count}}</b> Followers</li>
   </ul>
 
   <div class="tabBody" ng-show="tab == 'tracks'">
