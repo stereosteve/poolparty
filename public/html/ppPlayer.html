@@ -1,13 +1,15 @@
 <div class="ppPlayer">
 
   <div class="topRight">
-    <button ng-click="mute()" ng-hide="isMuted">mute</button>
-    <button ng-click="unmute()" ng-show="isMuted">unmute</button>
+    <button class="btn" ng-click="mute()" ng-hide="isMuted">mute</button>
+    <button class="btn" ng-click="unmute()" ng-show="isMuted">unmute</button>
 
-    <button ng-click="like()" ng-show="isLiked == false">like</button>
-    <button ng-click="unlike()" ng-show="isLiked == true">unlike</button>
+    <button class="btn" ng-click="like()" ng-show="isLiked == false">like</button>
+    <button class="btn" ng-click="unlike()" ng-show="isLiked == true">unlike</button>
 
-    <a target="_blank"
+    <a
+      class="btn"
+      target="_blank"
       ng-href="{{nowPlaying.track.download_url}}?client_id={{soundcloudId}}"
       ng-show="nowPlaying.track.download_url">download</a>
   </div>

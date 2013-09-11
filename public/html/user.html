@@ -6,8 +6,12 @@
     </div>
     <div class="bd">
       <div class="flr">
-        <button ng-show="isFollowing == false" ng-click="follow()">Follow</button>
-        <button ng-show="isFollowing == true" ng-click="unfollow()">Unfollow</button>
+        <button class="btn"
+          ng-show="isFollowing == false"
+          ng-click="follow()">Follow</button>
+        <button class="btn"
+          ng-show="isFollowing == true"
+          ng-click="unfollow()">Unfollow</button>
       </div>
       <h2>
         <a href="{{user.permalink_url}}" target="_blank">{{user.full_name}}</a>

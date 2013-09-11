@@ -205,17 +205,19 @@ PP.controller('userCtrl', function($scope, user, sc, $routeParams, $location) {
   // a token, so you eventually get a 401.
   // So a 404 means not following, and anything else means following.
   //
-  sc.get(followingsPath).then(function() {}, function(err) {
-    if (err.message.indexOf('404') > -1) {
-      // not following
-      $scope.isFollowing = false
-      console.log('not following')
-    } else {
-      // following
-      $scope.isFollowing = true
-      console.log('following')
-    }
-  })
+  if (user.id !== $scope.currentUser.id) {
+    sc.get(followingsPath).then(function() {}, function(err) {
+      if (err.message.indexOf('404') > -1) {
+        // not following
+        $scope.isFollowing = false
+        console.log('not following')
+      } else {
+        // following
+        $scope.isFollowing = true
+        console.log('following')
+      }
+    })
+  }
   $scope.follow = function() {
     sc.put(followingsPath).then(function() {
       $scope.isFollowing = true
@@ -355,10 +357,8 @@ PP.config(function($routeProvider, $locationProvider) {
     },
     controller: 'userCtrl'
   })
-  .when('/queue', {
-    templateUrl: '/html/queue.html',
-  })
   .when('/', {
+    chatMode: true,
     templateUrl: '/html/chat.html',
   })
 
@@ -388,7 +388,6 @@ PP.run(function(eventSource, $rootScope, $http, $timeout, sc) {
     $rootScope.queue = data
   })
   $http.get(BASE + '/now_playing').success(function(data) {
-    // $rootScope.queue = data
     $rootScope.nowPlaying = data
   })
 
@@ -401,6 +400,9 @@ PP.run(function(eventSource, $rootScope, $http, $timeout, sc) {
     $.post(BASE + '/still_here')
   }
 
+  $rootScope.$on('$routeChangeSuccess', function(source, current) {
+    $rootScope.chatMode = !!current.$$route.chatMode
+  })
 
   $rootScope.$watch('nowPlaying', function(nowPlaying) {
     if (!nowPlaying) return

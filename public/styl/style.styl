@@ -1,4 +1,5 @@
 $primary = deeppink
+
 $topbarHeight = 50px
 $sidebarWidth = 200px
 $playerHeight = 100px
@@ -43,6 +44,18 @@ img
 .clear
   clear: both;
 
+.btn
+  background: $primary
+  border: 1px solid #222
+  padding: 5px
+  color: white
+  font-size: 12px
+
+a.btn
+  text-decoration: none
+
+button.btn
+  cursor: pointer
 
 .media, .bd
   overflow:hidden;
@@ -68,13 +81,34 @@ img
 
 
 .topbar
-  background: #222
+  background: $primary
   position: fixed
   top: 0
   left: 0
   right: 0
   height: $topbarHeight
-  color: whitesmoke
+  color: white
+  line-height: $topbarHeight - 3px
+  border-top: 1px solid #222
+  border-bottom: 2px solid #222
+  box-shadow: 0px 0px 3px rgba(0,0,0,.8);
+  z-index: 5
+
+  a
+    color: white
+    font-weight: bold
+    text-decoration: none
+    display: block
+    float: left
+    border-right: 1px solid #222
+    padding: 0 20px
+  a.active
+    background: darken($primary, 20%)
+    text-shadow: 0px 0px 5px #222
+  a.logout
+    float: right
+    border-right: 0
+    border-left: 1px solid #222
 
 .mainContainer,
 .chatContainer
@@ -115,8 +149,8 @@ img
   left: 0px;
   height: $playerHeight;
   z-index: 100
-  background: whitesmoke
-  border-top: 1px solid #ccc
+  background: #ccc
+  border-top: 1px solid #222
 
 
 // chat
@@ -136,13 +170,14 @@ img
   .chat
     td
       padding: 6px;
-      border-bottom: 1px solid #f7f7f7;
+      border-top: 1px solid #f7f7f7;
 
   .nowPlaying
-    background: #222
-    color: gold
+    background: whitesmoke
+    color: $primary
     td
-      border-bottom: 1px solid black;
+      border-top: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
 
 .chatForm
   position: fixed;
@@ -248,6 +283,7 @@ img
   float: left;
   margin: 10px;
   border: 1px solid #ccc;
+  cursor: pointer
 
 .tabRow
   li
