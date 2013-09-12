@@ -416,13 +416,18 @@ PP.run(function(eventSource, $rootScope, $http, $timeout, sc) {
   $rootScope.$watch('nowPlaying', function(nowPlaying) {
     if (!nowPlaying) return
     $('.loadHead,.playHead').css('width', 0)
+    var seeked = false
     var opts = {
-      ontimedcomments: function(comments){
-        console.log(comments);
-      },
+      position: serverDate() - nowPlaying.startAt,
       whileloading: function() {
         var percentLoaded = this.bytesLoaded / this.bytesTotal * 100
         $('.loadHead').css('width', percentLoaded + '%')
+
+        var pos = serverDate() - nowPlaying.startAt
+        if (!seeked && this.duration > pos) {
+          seeked = true
+          this.setPosition(pos)
+        }
       },
       whileplaying: function() {
         var percentPlayed = this.position / this.durationEstimate * 100
@@ -430,8 +435,6 @@ PP.run(function(eventSource, $rootScope, $http, $timeout, sc) {
         $('.currentPos').text(formatMs(this.position))
       },
       onload: function() {
-        var pos = serverDate() - nowPlaying.startAt
-        if (!isNaN(pos)) this.setPosition(pos)
         loadNext()
       }
     }
