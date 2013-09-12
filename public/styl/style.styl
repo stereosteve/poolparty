@@ -1,4 +1,5 @@
-$primary = deeppink
+//$primary = deeppink
+$primary = teal
 
 $topbarHeight = 50px
 $sidebarWidth = 200px
@@ -49,7 +50,10 @@ img
   border: 1px solid #222
   padding: 5px
   color: white
-  font-size: 12px
+  font-size: 14px
+
+.btn:hover, .btn:focus
+  background: darken($primary, 30%)
 
 a.btn
   text-decoration: none
@@ -220,7 +224,7 @@ button.btn
     width: 30px
 
 .currentQueueItem
-  background: gold
+  background: lighten($primary, 80%)
   margin-top: 0
 
 // Player
