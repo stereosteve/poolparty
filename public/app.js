@@ -281,6 +281,20 @@ PP.directive('ppPlayer', function(sc) {
   }
 })
 
+PP.directive('userTabRow', function($route, $location) {
+  return function($scope, $el) {
+    var tab = $route.current.params.tabName
+    $el.find('[data-tab="'+tab+'"]').addClass('active')
+    $el.on('click li', function(ev) {
+      var toTab = ev.target.getAttribute('data-tab')
+      if (!toTab) return
+      var newPath = ['users', $scope.user.id, toTab].join('/')
+      $location.path(newPath)
+      $scope.$apply()
+    })
+  }
+})
+
 PP.directive('ppTrack', function() {
   return {
     templateUrl: '/html/ppTrack.html',

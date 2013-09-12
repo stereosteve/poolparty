@@ -56,6 +56,7 @@ img
   background: darken($primary, 30%)
 
 a.btn
+  display: inline-block
   text-decoration: none
 
 button.btn
@@ -70,15 +71,17 @@ button.btn
 .media .img img
   display:block;
 
+clearfix()
+  &:before
+  &:after
+    content: ""
+    display: table
+  &:after
+    clear: both
 
-.cf:before,
-.cf:after
-    content: " ";
-    display: table;
 
-.cf:after
-    clear: both;
-
+.cf
+  clearfix()
 
 
 
@@ -154,7 +157,7 @@ button.btn
   height: $playerHeight;
   z-index: 100
   background: #ccc
-  border-top: 1px solid #222
+  border-top: 2px solid #222
 
 
 // chat
@@ -224,7 +227,7 @@ button.btn
     width: 30px
 
 .currentQueueItem
-  background: lighten($primary, 80%)
+  background: rgba($primary, 15%)
   margin-top: 0
 
 // Player
@@ -236,38 +239,54 @@ button.btn
   height: 100px;
   position: relative;
 
+  .topLeft
+    position: absolute
+    top: 0
+    left: 0
+    width: 100px
+    border-right: 1px solid #222
+    z-index: 5
+
   .topRight
     position: absolute
     top: 0
     right: 0
     z-index: 5
 
-  .waveform
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 1;
-
   .info
     position: absolute;
     bottom: 0;
-    width: 100%;
+    left: 100px;
+    right: 0px;
     padding: 10px;
     z-index: 2;
     background: rgba(0,0,0,0.8);
     color: #ccc;
 
-  .loadHead, .playHead
+  .waveform
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
+    top: 0
+    left: 100px 
+    right: 0
+    height: 100%;
 
-  .loadHead
-    background: rgba(#2d2d2d, 50%);
+    .mask
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: 1;
 
-  .playHead
-    background: $primary;
+    .loadHead, .playHead
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+
+    .loadHead
+      background: rgba(#2d2d2d, 50%);
+
+    .playHead
+      background: $primary;
 
 
 
@@ -290,12 +309,23 @@ button.btn
   cursor: pointer
 
 .tabRow
+  clearfix()
+  border-bottom: 1px solid #ccc
+  background: whitesmoke
   li
     display: inline-block
+    float: left
     padding: 10px
     background: whitesmoke
-    margin: 5px 2px
     cursor: pointer
+    border-right: 1px solid #ccc
+  li.refresh
+    float: right
+    border-right: 0
+    border-left: 1px solid #ccc
+  li.active
+    background: white
+    color: black
 
 .tabBody
   padding: 20px

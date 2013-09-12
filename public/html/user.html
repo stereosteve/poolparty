@@ -12,19 +12,22 @@
         <button class="btn"
           ng-show="isFollowing == true"
           ng-click="unfollow()">Unfollow</button>
+        <a class="btn" target="_blank"
+          ng-href="{{user.permalink_url}}">Open in SoundCloud</a>
       </div>
-      <h2>
-        <a href="{{user.permalink_url}}" target="_blank">{{user.full_name}}</a>
+      <h2 style="margin-top: 20px">
+        {{user.full_name || user.username}}
       </h2>
+      <p style="margin-right: 100px"><small>{{user.description}}</small></p>
     </div>
   </div>
 
-  <ul class="tabRow">
-    <li class="flr" ng-click="scRefresh()">refresh</li>
-    <li ng-click="showTab('tracks')"><b>{{user.track_count}}</b> Tracks</li>
-    <li ng-click="showTab('favorites')"><b>{{user.public_favorites_count}}</b> Favorites</li>
-    <li ng-click="showTab('followings')"><b>{{user.followings_count}}</b> Following</li>
-    <li ng-click="showTab('followers')"><b>{{user.followers_count}}</b> Followers</li>
+  <ul class="tabRow" user-tab-row>
+    <li class="refresh" ng-click="scRefresh()">refresh</li>
+    <li data-tab="tracks"><b>{{user.track_count}}</b> Tracks</li>
+    <li data-tab="favorites"><b>{{user.public_favorites_count}}</b> Favorites</li>
+    <li data-tab="followings"><b>{{user.followings_count}}</b> Following</li>
+    <li data-tab="followers"><b>{{user.followers_count}}</b> Followers</li>
   </ul>
 
   <div class="tabBody" ng-show="tab == 'tracks'">

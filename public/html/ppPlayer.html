@@ -1,5 +1,9 @@
 <div class="ppPlayer">
 
+  <div class="topLeft clickable" ng-click="showUser(nowPlaying.track.user)">
+    <img ng-src="{{nowPlaying.track.user.avatar_url}}">
+  </div>
+
   <div class="topRight">
     <button class="btn" ng-click="mute()" ng-hide="isMuted">mute</button>
     <button class="btn" ng-click="unmute()" ng-show="isMuted">unmute</button>
@@ -14,9 +18,11 @@
       ng-show="nowPlaying.track.download_url">download</a>
   </div>
 
-  <img class="waveform" ng-src="{{nowPlaying.track.waveform_url}}">
-  <div class="playHead"></div>
-  <div class="loadHead"></div>
+  <div class="waveform">
+    <img class="mask" ng-src="{{nowPlaying.track.waveform_url}}">
+    <div class="playHead"></div>
+    <div class="loadHead"></div>
+  </div>
   <div class="info">
     <div>
       <div class="flr">
@@ -24,14 +30,10 @@
         /
         <span>{{nowPlaying.track.duration | ms}}</span>
       </div>
-      <b><a
-        ng-href="{{nowPlaying.track.user.permalink_url}}"
-        target="_blank"
-        ng-bind="nowPlaying.track.user.username"></a></b>
-      <a
-        ng-href="{{nowPlaying.track.permalink_url}}"
-        target="_blank"
-        ng-bind="nowPlaying.track.title"></a>
+      <b class="clickable"
+        ng-click="showUser(nowPlaying.track.user)"
+        ng-bind="nowPlaying.track.user.username"></b>
+      <em><small>{{nowPlaying.track.title}}</small></em>
     </div>
   </div>
 </div>
